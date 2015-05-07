@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var chalk = require('chalk');
 
 fs.readFile(path.join(__dirname, 'wolkenkratzer.json'), function (err, content) {
   if (err) return console.log(err);
@@ -11,7 +12,7 @@ fs.readFile(path.join(__dirname, 'wolkenkratzer.json'), function (err, content) 
 });
 
 function logTower(tower) {
-  console.log('Name: ' + tower.name);
-  console.log('Stadt: ' + tower.stadt);
-  console.log('Höhe: ' + tower.hoehe);
+  console.log('Name: ' + chalk.green(tower.name));
+  console.log('Stadt: ' + chalk.blue(tower.stadt));
+  console.log('Höhe: ' + chalk.red(tower.hoehe));
 }
