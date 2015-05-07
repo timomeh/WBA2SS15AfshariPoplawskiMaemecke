@@ -1,6 +1,7 @@
 var fs = require('fs');
+var path = require('path');
 
-fs.readFile('wolkenkratzer.json', function (err, content) {
+fs.readFile(path.join(__dirname, 'wolkenkratzer.json'), function (err, content) {
   if (err) return console.log(err);
   var parsed = JSON.parse(content);
   parsed.wolkenkratzer.forEach(function (tower) {
