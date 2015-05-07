@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 fs.readFile('wolkenkratzer.json', function (err, content) {
+  if (err) return console.log(err);
   var parsed = JSON.parse(content);
   parsed.wolkenkratzer.forEach(function (tower) {
     logTower(tower);
