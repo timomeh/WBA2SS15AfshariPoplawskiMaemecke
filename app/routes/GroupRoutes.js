@@ -142,8 +142,6 @@ router.delete('/:gid/member/:mid', function (req, res) {
       return member.id != memberId;
     });
 
-    console.log(group.members);
-
     db.set('group:' + groupId, JSON.stringify(group), function (err, saved) {
       if (err)
         return res.status(500).json({ message: 'Database write error', err: err });
