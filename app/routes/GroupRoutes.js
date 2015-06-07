@@ -30,6 +30,7 @@ router.post('/', function (req, res) {
 
     db.set('group:' + id, JSON.stringify(group), function (err, newGroup) {
       if (err) return res.json(err);
+      res.status(201);
       res.json(group);
     });
   });
@@ -48,8 +49,6 @@ router.get('/', function (req, res) {
       // Value als JSON parsen
       groups = groups.map(function (group) { return JSON.parse(group) });
 
-      // Gruppen nach ID sortieren
-      groups = groups.sort(function (groupA, groupB) { return groupA.id - groupB.id });
       res.json(groups);
     });
   });
@@ -80,6 +79,8 @@ router.put('/:id', function (req, res) {
   db.get('group:' + id, function (err, group) {
     if (err)
       return res.status(500).json({ message: 'Database read error', err: err });
+    if (group == null)
+      return res.status(404).json({ message: 'Group not found'});
     group = JSON.parse(group);
 
     // Dann die Werte nacheinander überschreiben/anlegen
@@ -108,16 +109,25 @@ router.post('/:id/member', function (req, res) {
       return res.status(500).json({ message: 'Database read error', err: err });
     group = JSON.parse(group);
 
-    // Members Array anlegen, falls nicht vorhanden oder nicht Array
-    if (!group.members || !(group.members instanceof Array))
-      group.members = [];
-
-    group.members.push(member);
-
-    db.set('group:' + id, JSON.stringify(group), function (err, saved) {
+    db.get('user:' + member.id, function (err, user) {
       if (err)
-        return res.status(500).json({ message: 'Database write error', err: err });
-      res.json(group);
+        return res.status(500).json({ message: 'Database read error', err: err });
+      if (user == null)
+        return res.status(404).json({ message: 'User not found' });
+      user = JSON.parse(user);
+
+
+      // Members Array anlegen, falls nicht vorhanden oder nicht Array
+      if (!group.members || !(group.members instanceof Array))
+        group.members = [];
+
+      group.members.push({ id: user.id });
+
+      db.set('group:' + id, JSON.stringify(group), function (err, saved) {
+        if (err)
+          return res.status(500).json({ message: 'Database write error', err: err });
+        res.json(group);
+      });
     });
   });
 });
@@ -169,6 +179,13 @@ router.get('/:id/member', function (req, res) {
 
 
 // Get all events from a group
+// 
+/**
+
+  TODO: This makes currently absolutely no sense
+
+**/
+
 router.get('/:id/event', function (req, res) {
   var id = req.params.id;
 

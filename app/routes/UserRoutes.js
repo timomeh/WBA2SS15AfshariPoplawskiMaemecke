@@ -12,9 +12,9 @@ router.post('/', function (req, res) {
   db.incr('userIDs', function (err, id) {
     var user = req.body;
     user.id = id;
-    db.set('user:' + user.id, JSON.stringify (user), function (err, newUser) {
-    	res.json (user); 
-	});
+    db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
+    	res.json(user); 
+	 });
   });
 });
 
@@ -24,7 +24,7 @@ router.get('/:id', function (req, res) {
   db.get('user:' + id, function (err, user) {
     if (user === 0) { // Wenn User nicht in Datenbank gefunden
       res.status(404);
-      return res.send('User nicht gefunden.')
+      return res.send('User nicht gefunden.');
     }
  
     res.json(JSON.parse(user));
@@ -45,14 +45,16 @@ router.put('/:id', function (req, res) {
     }
  
     // Update speichern
-    db.set('user:' + id, user, function (err, saved) {
-      res.json(JSON.parse(user));
+    db.set('user:' + id, JSON.stringify(user), function (err, saved) {
+      res.json(user);
     });
   });
  
 });
-	// User löschen 
-	router.delete('/:id', function (req, res) {
+
+// User löschen 
+router.delete('/:id', function (req, res) {
+  var id = req.params.id;
 	db.del('user:' + id, function (err, ret) {
 		res.status(204);
 		res.send();

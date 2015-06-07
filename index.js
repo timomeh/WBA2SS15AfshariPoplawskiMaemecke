@@ -18,3 +18,5 @@ app.use('/api', require('./app/RouteMap'));
 app.listen(app.get('port'), function () {
   console.log('Server is listening on port ' + app.get('port'));
 });
+
+module.exports.express = app;
