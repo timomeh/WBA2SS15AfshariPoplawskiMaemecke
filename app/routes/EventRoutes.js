@@ -17,7 +17,7 @@ router.post('/', function (req, res) {
 
     db.set('event:' +id, JSON.stringify(event), function (err, rep) {
       if(err) return res.status(500).send('Error while writing to Database');
-      res.json(event);
+      res.status(201).json(event);
     })
   });
 });
@@ -58,11 +58,17 @@ router.put('/:id', function (req, res) {
 router.delete('/:id', function(req, res) {
   var eventID = req.params.id;
   
-  // Best Practice? Return deleted key/value?
-  db.del('event:' +eventID, function(err, rep) {
+  db.get('event:' +eventID, function(err, rep) {
+    if (rep == null) return res.status(404).send('No Event with the ID ' + eventID + ' was found'); 
+
+    // Best Practice? Return deleted key/value?
+    db.del('event:' +eventID, function(err, rep) {
     if(err) return res.status(500).send('Error while deleting from Database');
-    return res.status(200).send('Successfully deleted event with the id ' +eventID);
+    return res.status(204).send('Successfully deleted event with the id ' +eventID);
   });
+
+  });
+  
 });
 
 
