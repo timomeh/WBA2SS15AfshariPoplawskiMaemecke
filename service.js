@@ -11,7 +11,7 @@ app.use(methodOverride());
 app.use(bodyParser.json());
 
 // Routes are in app/routes.js
-app.use('/api', require('./app/RouteMap'));
+app.use('/api', require('./server/RouteMap'));
 
 
 // Start the server

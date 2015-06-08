@@ -3,10 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "description": "Social Calendar",
-  "main": "index.js",
+  "main": "service.js",
   "scripts": {
-    "start": "node index",
-    "test": "mocha"
+    "start": "node service",
+    "test": "mocha",
+    "client": "node client"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/timomeh/friendar",
   "dependencies": {
     "body-parser": "^1.12.4",
+    "consolidate": "^0.13.1",
     "express": "^4.12.3",
     "method-override": "^2.3.3",
     "redis": "^0.12.1"

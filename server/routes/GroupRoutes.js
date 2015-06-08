@@ -79,7 +79,7 @@ router.put('/:id', function (req, res) {
   db.get('group:' + id, function (err, group) {
     if (err)
       return res.status(500).json({ message: 'Database read error', err: err });
-    if (group == null)
+    if (group === null)
       return res.status(404).json({ message: 'Group not found'});
     group = JSON.parse(group);
 
@@ -112,7 +112,7 @@ router.post('/:id/member', function (req, res) {
     db.get('user:' + member.id, function (err, user) {
       if (err)
         return res.status(500).json({ message: 'Database read error', err: err });
-      if (user == null)
+      if (user === null)
         return res.status(404).json({ message: 'User not found' });
       user = JSON.parse(user);
 
