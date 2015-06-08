@@ -14,11 +14,21 @@ router.post('/', function (req, res) {
     
     // Set id of event to consitent one calculated by db
     event.id = id;
+    var groupID = event.groupid;
 
-    db.set('event:' +id, JSON.stringify(event), function (err, rep) {
-      if(err) return res.status(500).send('Error while writing to Database');
-      res.status(201).json(event);
-    })
+    db.get('group:' +groupID, function(err, group) {
+      if(err) return res.status(500).send('Error while reading from database');
+      if(group === null) return res.status(404).send('Group with the ID ' + groupID + ' was not found in database');
+
+      db.set('event:' +id, JSON.stringify(event), function (err, rep) {
+        if(err) return res.status(500).send('Error while writing to Database');
+        res.status(201).json(event);
+      }); 
+
+    });
+
+
+    
   });
 });
 
@@ -28,7 +38,7 @@ router.get('/:id', function (req, res) {
 
   db.get('event:' +eventID, function(err, rep) {
     if(err) return res.status(500).send('Error while reading from database.');
-    if(rep == null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
+    if(rep === null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
     res.json(JSON.parse(rep));
   });
 });
@@ -39,7 +49,7 @@ router.put('/:id', function (req, res) {
 
 
   db.get('event:' +eventID, function(err, rep){
-    if(rep == null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
+    if(rep === null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
 
     var event = JSON.parse(rep);
     
@@ -59,7 +69,7 @@ router.delete('/:id', function(req, res) {
   var eventID = req.params.id;
   
   db.get('event:' +eventID, function(err, rep) {
-    if (rep == null) return res.status(404).send('No Event with the ID ' + eventID + ' was found'); 
+    if (rep === null) return res.status(404).send('No Event with the ID ' + eventID + ' was found'); 
 
     // Best Practice? Return deleted key/value?
     db.del('event:' +eventID, function(err, rep) {
@@ -73,11 +83,12 @@ router.delete('/:id', function(req, res) {
 
 
 router.post('/:id/member/', function(req, res) {
-   var id = req.params.id;
+  var id = req.params.id;
 
+  // Check if the event exists
   db.get('event:' +id, function(err, event) {
     if(err) return res.status(500).send('Error while reading from database.');
-    if(event == null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
+    if(event === null) return res.status(404).send('No event with the id ' +id +' was found in the database.');
 
     event = JSON.parse(event);
 
@@ -93,12 +104,19 @@ router.post('/:id/member/', function(req, res) {
     // Check if the user to be added to the event exists
     db.get('user:' +member.id, function(err, user) {
       if(err) return res.status(500).send('Error while reading from database.');
-      if(user == null) return res.status(404).send('No user with the id ' +member.id +' was found in the database.');
+      if(user === null) return res.status(404).send('No user with the id ' +member.id +' was found in the database.');
 
+      // Check, if the user already is a member of the given event
+      for (var i = 0, len = members_arr.length; i < len; i++) {
+          if(members_arr[i].id == member.id) 
+            return res.status(409).send('User with the ID ' +member.id + ' is already member of this event');
+      }     
+
+      // User existes, not yet member, add him to the members array
       members_arr.push({id:  member.id});
       event.members = members_arr;
 
-      // Update the event
+      // Update the event with the modified members array
       db.set('event:' +id, JSON.stringify(event), function(err, rep) {
         if(err) return res.status(500).send('Error writing to database.');
         res.json(event);
@@ -114,7 +132,7 @@ router.get('/:id/member', function (req, res) {
 
   db.get('event:' +id, function(err, event) {
     if(err) return res.status(500).send('Error while reading from database.');
-    if(event == null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
+    if(event === null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
 
     event = JSON.parse(event);
 
@@ -134,7 +152,7 @@ router.delete('/:id/member/:user', function(req, res) {
   // Check if event from which a user is to be removed exists.
   db.get('event:' +eventID, function(err, event) {
     if(err) return res.status(500).send('Error while reading from database.');
-    if(event == null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
+    if(event === null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
 
     event = JSON.parse(event);
 
