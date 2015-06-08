@@ -4,11 +4,15 @@ var should = require('should');
 describe('/api/events', function() {
   describe('POST /', function() {
     it('should create a new event with 201 Created', function(done) {
+      event1.groupid = group1.id;
+      event2.groupid = group2.id;
       request(app)
         .post('/api/events/')
         .send(event1)
         .expect(201)
         .end(function(err, res) {
+          console.log(res.body);
+          console.log(err);
           res.body.name.should.eql(event1.name);
           res.body.id.should.be.a.Number;
           event1.id = res.body.id;
