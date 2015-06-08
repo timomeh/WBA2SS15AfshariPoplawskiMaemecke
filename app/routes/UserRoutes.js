@@ -13,7 +13,8 @@ router.post('/', function (req, res) {
     var user = req.body;
     user.id = id;
     db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
-    	res.json(user); 
+    	
+      res.status(201).json(user); 
 	 });
   });
 });
@@ -22,7 +23,7 @@ router.post('/', function (req, res) {
 router.get('/:id', function (req, res) {
   var id = req.params.id;
   db.get('user:' + id, function (err, user) {
-    if (user === 0) { // Wenn User nicht in Datenbank gefunden
+    if (user === null) { // Wenn User nicht in Datenbank gefunden
       res.status(404);
       return res.send('User nicht gefunden.');
     }
@@ -38,7 +39,12 @@ router.put('/:id', function (req, res) {
  
   // Den User aus der Datenbank holen
   db.get('user:' + id, function (err, user) {
-    user = JSON.parse(user);
+   if (user === null ) {
+    res.status(404);
+    return res.send();
+  }
+   user = JSON.parse(user);
+
  
     for (var data in req.body) {
       user[data] = req.body[data];
@@ -55,10 +61,16 @@ router.put('/:id', function (req, res) {
 // User löschen 
 router.delete('/:id', function (req, res) {
   var id = req.params.id;
-	db.del('user:' + id, function (err, ret) {
-		res.status(204);
+db.get('user:' + id,function (err,ret) {
+  if (ret === null ) {
+    res.status(404);
+    return res.send();
+  }
+db.del('user:' + id, function (err, ret) {
+    res.status(204);
 		res.send();
 	});
+});
 });
  
  
