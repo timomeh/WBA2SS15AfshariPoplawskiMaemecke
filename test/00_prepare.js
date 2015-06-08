@@ -1,4 +1,4 @@
-app = require('../index').express;
+app = require('../service').express;
 
 user1 = { vorname: "Brian", nachname: "Cohan" };
 user2 = { vorname: "Bigus", nachname: "Dickus" };
