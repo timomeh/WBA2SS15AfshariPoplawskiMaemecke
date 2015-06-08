@@ -61,7 +61,7 @@ router.get('/:id', function (req, res) {
   db.get('group:' + id, function (err, group) {
     if (err)
       return res.status(500).json({ message: 'Database read error', err: err });
-    if (group === 0) { // Wenn Gruppe nicht in Datenbank gefunden
+    if (group === null) { // Wenn Gruppe nicht in Datenbank gefunden
       res.status(404);
       return res.send('Gruppe nicht gefunden.')
     }
@@ -118,7 +118,7 @@ router.post('/:id/member', function (req, res) {
 
 
       // Members Array anlegen, falls nicht vorhanden oder nicht Array
-      if (!group.members || !(group.members instanceof Array))
+      if (!group.members || !(group.members instanceof Array)) 
         group.members = [];
 
       group.members.push({ id: user.id });
@@ -170,8 +170,8 @@ router.get('/:id/member', function (req, res) {
       return res.status(500).json({ message: 'Database read error', err: err });
     group = JSON.parse(group);
 
-    if (!group.members)
-      return res.json([]);
+    if (!group.members || group.members.length === 0)
+      return res.status(404).json({ message: 'No members in group' });
 
     res.json(group.members);
   });
