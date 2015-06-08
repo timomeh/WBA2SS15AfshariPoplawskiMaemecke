@@ -20,11 +20,23 @@ router.post('/', function (req, res) {
       if(err) return res.status(500).send('Error while reading from database');
       if(group === null) return res.status(404).send('Group with the ID ' + groupID + ' was not found in database');
 
-      db.set('event:' +id, JSON.stringify(event), function (err, rep) {
-        if(err) return res.status(500).send('Error while writing to Database');
-        res.status(201).json(event);
-      }); 
+      var group = JSON.parse(group);
+      if (!group.events)
+        group.events = [];
 
+      group.events.push({ id: event.id });
+
+      db.set('group:' +groupID, JSON.stringify(group), function (err, rep) {
+        if(err) return res.status(500).send('Error while writing to Database');
+
+        db.set('event:' +id, JSON.stringify(event), function (err, rep) {
+          if(err) return res.status(500).send('Error while writing to Database');
+          res.status(201).json(event);
+        }); 
+
+      });
+
+    
     });
 
 

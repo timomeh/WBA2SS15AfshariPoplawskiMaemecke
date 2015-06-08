@@ -179,13 +179,6 @@ router.get('/:id/member', function (req, res) {
 
 
 // Get all events from a group
-// 
-/**
-
-  TODO: This makes currently absolutely no sense
-
-**/
-
 router.get('/:id/event', function (req, res) {
   var id = req.params.id;
 
