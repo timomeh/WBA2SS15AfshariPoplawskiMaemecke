@@ -104,43 +104,49 @@ router.get('/events/new', function(req, res) {
   res.render('event-new', { name: 'Welt' });
 });
 
-router.post('events/new', function(req, res) {
+router.post('/events/new', function(req, res) {
 
+  
   // Set options for request
   var post_options = {
-      host: 'http://localhost:8888',
-      port: '80',
-      path: '/api/event',
+      host: 'localhost',
+      port: '8888',
+      path: '/api/events',
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
-          'Content-Length': req.body.length
+          'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
       }
   };
 
   // Set up teh request
-  var post_req = http.request(post_options, function(res) {
-    res.setEncoding('utf8');
+  var post_req = http.request(post_options, function(post_res) {
+    post_res.setEncoding('utf8');
     var body = '';
-    res.on('data', function(chunk) {
+    post_res.on('data', function(chunk) {
       body += chunk;
     });
 
-    res.on('end', function() {
+    post_res.on('end', function() {
       var returns = JSON.parse(body);
 
       if(Array.isArray(returns)) {
         console.log('Success');
+        console.log(returns);
+        res.end();
       } else {
         console.log('Failure');
+        res.end();
       }
     })
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
   }); 
 
   // post the data
-  post_req.write(req.body);
+  post_req.write(JSON.stringify(req.body));
   post_req.end();
-
+  
 }); 
 
 module.exports = router;

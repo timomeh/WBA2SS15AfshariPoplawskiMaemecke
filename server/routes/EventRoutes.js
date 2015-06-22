@@ -8,6 +8,9 @@ var db = redis.createClient();
 // =================
 
 router.post('/', function (req, res) {
+
+console.log("Entered POST on Server, recieved " + JSON.stringify(req.body));
+
   db.incr('eventIDs', function (err, id) {
     if(err) return res.status(500).send('Error while incrementing ID in Database');
     var event = req.body;

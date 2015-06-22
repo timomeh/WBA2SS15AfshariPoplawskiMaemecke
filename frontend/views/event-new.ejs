@@ -6,22 +6,26 @@
   </div>
   <div class="row">
     <div class="col-xs-6">
-      <form>
+      <form method="POST" action="/events/new">
         <div class="form-group">
           <label for="eventNameInput">Eventname</label>
-          <input type="email" class="form-control" id="eventNameInput" placeholder="Name">
+          <input type="text" class="form-control" id="eventNameInput" name="name" placeholder="Name">
         </div>
         <div class="form-group">
           <label for="ortInput">Ort</label>
-          <input type="text" class="form-control" id="ortInput" placeholder="Ort">
+          <input type="text" class="form-control" id="ortInput" name="location" placeholder="Ort">
         </div>
         <div class="form-group">
           <label for="dateInput">Datum</label>
-          <input type="date" class="form-control" id="dateInput" placeholder="DD/MM/YYYY">
+          <input type="date" class="form-control" id="dateInput" name="date" placeholder="DD/MM/YYYY">
         </div>
         <div class="form-group">
           <label for="timeInput">Zeit</label>
-          <input type="time" class="form-control" id="timeInput" placeholder="DD/MM/YYYY">
+          <input type="time" class="form-control" id="timeInput" name="time" placeholder="DD/MM/YYYY">
+        </div>
+        <div class="form-group">
+          <label for="groupIDInput">GroupID</label>
+          <input type="number" class="form-control" id="groupIDInput" name="groupid" placeholder="id">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
