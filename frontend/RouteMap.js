@@ -105,7 +105,42 @@ router.get('/events/new', function(req, res) {
 });
 
 router.post('events/new', function(req, res) {
-  
+
+  // Set options for request
+  var post_options = {
+      host: 'http://localhost:8888',
+      port: '80',
+      path: '/api/event',
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': req.body.length
+      }
+  };
+
+  // Set up teh request
+  var post_req = http.request(post_options, function(res) {
+    res.setEncoding('utf8');
+    var body = '';
+    res.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    res.on('end', function() {
+      var returns = JSON.parse(body);
+
+      if(Array.isArray(returns)) {
+        console.log('Success');
+      } else {
+        console.log('Failure');
+      }
+    })
+  }); 
+
+  // post the data
+  post_req.write(req.body);
+  post_req.end();
+
 }); 
 
 module.exports = router;
