@@ -28,6 +28,8 @@ app.use(function(req, res, next) {
 });
 app.use(function(req, res, next) {
 	res.locals.user = req.session.user;
+	if (res.locals.user !== undefined)
+		delete res.locals.user.password;
 	next();
 });
 
