@@ -9,4 +9,8 @@ router.get('/events', function(req, res) {
   res.render('event-main', { name: 'Welt' });
 })
 
+router.get('/events/new', function(req, res) {
+  res.render('event-new', { name: 'Welt' });
+})
+
 module.exports = router;
