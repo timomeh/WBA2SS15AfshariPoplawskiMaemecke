@@ -1,5 +1,7 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var cons = require('consolidate');
+var session = require('express-session');
 
 // Express instance
 var app = express();
@@ -11,6 +13,23 @@ app.engine('ejs', cons.ejs);
 // set .html as the default extension
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/frontend/views');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(session({ secret: 'totallysecret' }));
+
+app.use(function(req, res, next) {
+	if (req.session.user) {
+		return next();
+	} else {
+		if (req.originalUrl === '/login' || req.originalUrl === '/signup') {
+			return next();
+		}
+		res.redirect('/login');
+	}
+});
+app.use(function(req, res, next) {
+	res.locals.user = req.session.user;
+	next();
+});
 
 // Routes are in app/routes.js
 app.use('/', require('./frontend/RouteMap'));
