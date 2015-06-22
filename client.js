@@ -15,6 +15,8 @@ app.set('views', __dirname + '/frontend/views');
 // Routes are in app/routes.js
 app.use('/', require('./frontend/RouteMap'));
 
+app.use(express.static(__dirname + '/frontend/public'));
+
 
 // Start the server
 app.listen(app.get('port'), function () {

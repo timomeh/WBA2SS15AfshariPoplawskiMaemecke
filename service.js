@@ -1,12 +1,14 @@
 var express        = require('express');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
+var cors           = require('cors');
 
 // Express instance
 var app = express();
 app.set('port', process.env.PORT || 8888);
 
 // Middleware
+app.use(cors()); // Required to call the server with ajax on the client
 app.use(methodOverride());
 app.use(bodyParser.json());
 
