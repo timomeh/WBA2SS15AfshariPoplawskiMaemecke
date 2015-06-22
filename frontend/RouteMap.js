@@ -33,4 +33,8 @@ router.get('/groups', function(req, res) {
   });
 });
 
+router.get('/events', function(req, res) {
+  res.render('event-main', { name: 'Welt' });
+});
+
 module.exports = router;
