@@ -69,6 +69,10 @@ router.get('/events', function(req, res) {
 
 router.get('/events/new', function(req, res) {
   res.render('event-new', { name: 'Welt' });
-})
+});
+
+router.post('events/new', function(req, res) {
+  
+}); 
 
 module.exports = router;
