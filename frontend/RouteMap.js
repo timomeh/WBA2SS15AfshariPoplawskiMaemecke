@@ -104,4 +104,7 @@ router.get('/events/new', function(req, res) {
   res.render('event-new', { name: 'Welt' });
 })
 
+router.get('/user', function(req, res) {
+  res.render('user-main', { name: 'User' });
+})
 module.exports = router;
