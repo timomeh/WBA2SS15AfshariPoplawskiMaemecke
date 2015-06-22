@@ -4,6 +4,36 @@
   <div class="row">
       <div class="col-xs-12"><h2>Deine Events</h2></div>
   </div>
+  
+  <table class="table table-striped">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Ort</th>
+      <th>Zeit</th>
+      <th>Teilnahme ändern</th>
+    </tr>
+    <% events.forEach(function (event) { %>
+      <tr>
+        <td><%= event.id %></td>
+        <td><%= event.name %></td>
+        <!-- Implement those two later, when Event structure is unified -->
+        <td>Interwebs</td>
+        <td>01.01.1970</td>
+        <td><button type="button" class="btn btn-danger">absagen</button></td>
+      </tr>
+    <% }); %>
+    
+  </table>
+
+  <div class="row">
+    <div class="col-xs-12"> <h3>Neues Event erstellen</h3></div>
+    <div class="col-xs-12"> 
+      <form action="/events/new">
+        <input type="submit" class="btn btn-primary" value="Event erstellen"></input>
+      </form>
+    </div>
+  </div>
 </div>
 
 <%- include('footer') %>

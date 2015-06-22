@@ -66,8 +66,42 @@ router.get('/groups', function(req, res) {
   });
 });
 
+//========
+// Events
+//========
+
 router.get('/events', function(req, res) {
-  res.render('event-main', { name: 'Welt' });
+  // GET request for all events
+  http.get("http://localhost:8888/api/events", function(eventRes) {
+    var body = '';
+
+    // While still recieving data, append current chunk to body
+    eventRes.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    // Data transfer has ended, do something with the data
+    eventRes.on('end', function() {
+      var events = JSON.parse(body);
+
+      if(Array.isArray(events)) {
+        // Sort by nearest DateTime later
+        // Need to wait until all Events in DB have a Date and Time field.
+      } else {
+        //Set array empty to prevent error from being rendered in Client
+        events= [];
+      }
+
+      // Render frontend with the recieved events
+      res.render('event-main', { events: events });
+    })
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 });
+
+router.get('/events/new', function(req, res) {
+  res.render('event-new', { name: 'Welt' });
+})
 
 module.exports = router;
