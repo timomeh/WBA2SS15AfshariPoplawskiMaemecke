@@ -152,11 +152,19 @@ router.delete('/:gid/member/:mid', function (req, res) {
       return member.id != memberId;
     });
 
-    db.set('group:' + groupId, JSON.stringify(group), function (err, saved) {
-      if (err)
-        return res.status(500).json({ message: 'Database write error', err: err });
-      res.json(group);
-    });
+    if (group.members.length === 0) {
+      db.del('group:' + groupId, function (err, ret) {
+        if (err)
+          return res.status(500).json({ message: 'Database delete error', err: err });
+        res.json({});
+      });
+    } else {
+      db.set('group:' + groupId, JSON.stringify(group), function (err, saved) {
+        if (err)
+          return res.status(500).json({ message: 'Database write error', err: err });
+        res.json(group);
+      });
+    }
   });
 });
 

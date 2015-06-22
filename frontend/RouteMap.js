@@ -10,11 +10,6 @@ router.get('/login', function(req, res) {
   res.render('login');
 });
 
-router.get('/logout', function(req, res) {
-  req.session.user = undefined;
-  res.redirect('/login');
-});
-
 router.post('/login', function(req, res) {
   if (req.session.user) return res.redirect('/');
   http.get("http://localhost:8888/api/users/" + req.body.id, function(userRes) {
@@ -37,6 +32,11 @@ router.post('/login', function(req, res) {
       }
     });
   });
+});
+
+router.get('/logout', function(req, res) {
+  req.session.user = undefined;
+  res.redirect('/login');
 });
 
 router.get('/groups', function(req, res) {
@@ -149,4 +149,7 @@ router.post('/events/new', function(req, res) {
   
 }); 
 
+router.get('/user', function(req, res) {
+  res.render('user-main', { name: 'User' });
+})
 module.exports = router;
