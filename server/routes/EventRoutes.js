@@ -33,14 +33,24 @@ router.post('/', function (req, res) {
           if(err) return res.status(500).send('Error while writing to Database');
           res.status(201).json(event);
         }); 
-
       });
-
-    
     });
+  });
+});
 
+router.get('/', function(req, res) {
+  db.keys('event:*', function (err, keys) {
+    if (err)
+      return res.status(500).json({ message: 'Database read error', err: err });
 
-    
+    db.mget(keys, function (err, events) {
+      if (err)
+      return res.status(500).json({ message: 'Database read error', err: err });
+      // Value als JSON parsen
+      events = events.map(function (event) { return JSON.parse(event) });
+
+      res.json(events);
+    });
   });
 });
 

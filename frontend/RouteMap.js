@@ -34,6 +34,10 @@ router.get('/groups', function(req, res) {
 });
 
 router.get('/events', function(req, res) {
+  // GET request for all events
+  http.get("http://localhost:8888/api/events", function(eventRes) {
+
+  });
   res.render('event-main', { name: 'Welt' });
 });
 
