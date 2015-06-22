@@ -16,6 +16,8 @@ app.set('views', __dirname + '/frontend/views');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session({ secret: 'totallysecret' }));
 
+app.use(express.static(__dirname + '/frontend/public'));
+
 app.use(function(req, res, next) {
 	if (req.session.user) {
 		return next();
@@ -35,8 +37,6 @@ app.use(function(req, res, next) {
 
 // Routes are in app/routes.js
 app.use('/', require('./frontend/RouteMap'));
-
-app.use(express.static(__dirname + '/frontend/public'));
 
 
 // Start the server

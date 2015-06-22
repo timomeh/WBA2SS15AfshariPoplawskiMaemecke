@@ -20,7 +20,7 @@
                 <td><%= group.id %></td>
                 <td><%= group.name %></td>
                 <td><%= group.members ? group.members.length : 0 %></td>
-                <td><button type="button" class="btn btn-xs btn-danger js-delete-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
+                <td><button type="button" class="btn btn-xs btn-danger js-leave-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
               </tr>
               <% }); %>
             </tbody>
@@ -37,7 +37,7 @@
           <form action="/groups/save" id="newGroup">
             <div class="form-group">
               <label for="inputGroupName">Name</label>
-              <input type="email" class="form-control" id="inputGroupName" placeholder="Meine tolle Gruppe">
+              <input type="text" class="form-control" id="inputGroupName" placeholder="Meine tolle Gruppe">
             </div>
             <button type="submit" class="btn btn-success">Anlegen</button>
           </form>
