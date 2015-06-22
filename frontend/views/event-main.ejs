@@ -13,13 +13,17 @@
       <th>Zeit</th>
       <th>Teilnahme ändern</th>
     </tr>
-    <tr>
-      <td>1</td>
-      <td>HTML Placholder Event</td>
-      <td>Interwebs</td>
-      <td>01.01.1970</td>
-      <td><button type="button" class="btn btn-danger">absagen</button></td>
-    </tr>
+    <% events.forEach(function (event) { %>
+      <tr>
+        <td><%= event.id %></td>
+        <td><%= event.name %></td>
+        <!-- Implement those two later, when Event structure is unified -->
+        <td>Interwebs</td>
+        <td>01.01.1970</td>
+        <td><button type="button" class="btn btn-danger">absagen</button></td>
+      </tr>
+    <% }); %>
+    
   </table>
 
   <div class="row">
