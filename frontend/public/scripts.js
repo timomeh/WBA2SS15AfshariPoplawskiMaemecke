@@ -1,5 +1,10 @@
 $(function() {
-  var groupRowTemplate = "<tr><td>{{id}}</td><td>{{name}}</td><td>{{count}}</td></tr>"
+  var groupRowTemplate = "<tr>"+
+    "<td>{{id}}</td>"+
+    "<td>{{name}}</td>"+
+    "<td>{{count}}</td>"+
+    "<td><button type='button' class='btn btn-xs btn-danger js-delete-group' data-id='{{id}}'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td>"+
+    "</tr>";
   $('#newGroup').on('submit', function(e) {
     e.preventDefault();
     var jqxhr = $.ajax({
@@ -15,11 +20,24 @@ $(function() {
         data.count = 0;
       }
       var render = Mark.up(groupRowTemplate, data);
-      console.log(render);
       $('.js-group-table-body').prepend(render);
     })
     .fail(function() {
       alert("Fehler beim Request");
+    });
+  });
+
+  $('.js-delete-group').on('click', function() {
+    var $self = $(this);
+    var jqxhr = $.ajax({
+      method: "DELETE",
+      url: "http://localhost:8888/api/groups/" + $self.attr('data-id'),
     })
+    .done(function(data) {
+      $self.parent('tr').remove();
+    })
+    .fail(function() {
+      alert("Fehler beim Request");
+    });
   });
 });

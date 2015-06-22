@@ -12,6 +12,7 @@
               <th>#</th>
               <th>Name</th>
               <th>Anzahl der Mitglieder</th>
+              <th>Aktion</th>
             </thead>
             <tbody class="js-group-table-body">
               <% groups.forEach(function (group) { %>
@@ -19,6 +20,7 @@
                 <td><%= group.id %></td>
                 <td><%= group.name %></td>
                 <td><%= group.members ? group.members.length : 0 %></td>
+                <td><button type="button" class="btn btn-xs btn-danger js-delete-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
               </tr>
               <% }); %>
             </tbody>
