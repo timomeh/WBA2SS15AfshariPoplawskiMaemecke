@@ -9,6 +9,7 @@ var db = redis.createClient();
 
 router.post('/', function (req, res) {
 
+//DEBUG 
 console.log("Entered POST on Server, recieved " + JSON.stringify(req.body));
 
   db.incr('eventIDs', function (err, id) {

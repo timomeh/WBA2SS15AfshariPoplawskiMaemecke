@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var http = require('http');
 
+
 router.get('/', function(req, res) {
   res.render('test', { name: 'Welt' });
 });
@@ -130,7 +131,7 @@ router.post('/events/new', function(req, res) {
     post_res.on('end', function() {
       var returns = JSON.parse(body);
 
-      if(Array.isArray(returns)) {
+      if( (typeof returns === 'object') && (returns !== null)) {
         console.log('Success');
         console.log(returns);
         res.end();
@@ -142,6 +143,8 @@ router.post('/events/new', function(req, res) {
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   }); 
+
+  
 
   // post the data
   post_req.write(JSON.stringify(req.body));
