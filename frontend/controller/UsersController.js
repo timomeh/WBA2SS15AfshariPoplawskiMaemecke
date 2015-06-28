@@ -76,7 +76,7 @@ exports.create = function(req, res) {
         res.end();
       } else {
         console.log('Failure');
-        res.end();
+         res.redirect('/login');
       }
     })
   }).on('error', function(e) {
