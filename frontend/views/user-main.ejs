@@ -2,51 +2,28 @@
 
 <div class="container-fluid">
   <div class="row">
-      <div class="col-xs-12"><h2>Willkommen auf der User Seite</h2></div>
+      <div class="col-xs-12"><h2>Willkommen auf deiner User Seite</h2></div>
   </div>
 </div>
 
 </br>
 
-<div class="col-lg-3">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Username">
-</div><!-- /.row -->
-
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Passwort">
-      </div><!-- /.row -->
-
-      <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default">Einloggen</button>
+<div class="row">
+  <div class="col-xs-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">Dein Username</div>
+      <div class="panel-body">
+        <%= user.Name %>
+      </div>
     </div>
-</div><!-- /.row -->
 
-
-<div class="col-lg-4">
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"></span>
-  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
-</div>
-
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"></span>
-  <input type="text" class="form-control" placeholder="Passwort" aria-describedby="basic-addon1">
-</div>
-
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"></span>
-  <input type="text" class="form-control" placeholder="Passwort bestätigen" aria-describedby="basic-addon1">
-</div>
-
-<div class="input-group">
-  <span class="input-group-addon" id="basic-addon1"></span>
-  <input type="text" class="form-control" placeholder="E-mail-Adresse" aria-describedby="basic-addon1">
-</div>
- 
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-default">Account Anlegen</button>
+    <div class="panel panel-default">
+      <div class="panel-heading">Deine UserID</div>
+      <div class="panel-body">
+        <%= user.id %>
+      </div>
+    </div>
   </div>
 </div>
-</div>
+
 <%- include('footer') %>
