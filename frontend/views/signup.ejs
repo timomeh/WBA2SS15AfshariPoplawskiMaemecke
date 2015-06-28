@@ -1,0 +1,28 @@
+<%- include('header') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12"><h1>Neuen User anlegen</h1></div>
+  </div>
+  <div class="row">
+    <div class="col-xs-4">
+      <form method="POST" action="/signup">
+        <div class="form-group">
+          <label for="userName">Username</label>
+          <input type="text" class="form-control" id="userName" name="name" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <label for="userId">UserID</label>
+          <input type="text" class="form-control" id="userId" name="id" placeholder="UserID">
+        </div>
+        <div class="form-group">
+              <label for="password">Passwort</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="*****">
+            </div>     
+        <button type="submit" class="btn btn-default">Einloggen</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>
