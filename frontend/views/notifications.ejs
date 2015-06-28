@@ -1,0 +1,18 @@
+<%- include('header') %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <% user.notifications.forEach(function(notification) { %>
+          <div class="panel panel-default" id="not<%= notification.id %>">
+            <div class="panel-body">
+              <%= notification.message %>
+            </div>
+            <div class="panel-footer">
+              <button type="button" class="js-delete-notification btn btn-danger btn-sm" data-id="<%= notification.id %>">Löschen</button>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+<%- include('footer') %>

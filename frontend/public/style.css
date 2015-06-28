@@ -1,0 +1,4 @@
+.is-unread,
+.is-unread a {
+	font-weight: bold !important;
+}

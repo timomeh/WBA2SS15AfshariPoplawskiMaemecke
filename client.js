@@ -13,6 +13,7 @@ var session = require('express-session');
 // consolidate is a convenient way to add  various
 // view engines to express
 var cons = require('consolidate');
+var notify = require('./frontend/NotificationHelper');
 
 // END Module dependencies
 // =======================
@@ -43,6 +44,7 @@ app.set('views', __dirname + '/frontend/views');
 // Middleware 
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({ secret: 'totallysecret' }));
 app.use(express.static(__dirname + '/frontend/public'));
 
@@ -61,6 +63,14 @@ app.use(function(req, res, next) {
 
   // If session exists, user can access all pages
   if (req.session.user) {
+    // Append Notifications to user session
+    notify.fromUser(req.session.user.id, function(err, notifications) {
+      var unread = notifications.filter(function(notification) {
+        return notification.unread;
+      });
+      req.session.user.unreadNotifications = unread.length;
+      req.session.user.notifications = notifications;
+    });
     return next();
   }
 
@@ -99,4 +109,13 @@ app.use('/', require('./frontend/RouteMap'));
 
 server.listen(app.get('port'), function () {
   console.log('Client is listening on port ' + app.get('port'));
+});
+
+
+sio.on('connection', function(socket) {
+  socket.on('read', function(data) {
+    notify.markAsRead(data.userId, data.notifyId, function(err) {
+      // Blank?
+    });
+  });
 });

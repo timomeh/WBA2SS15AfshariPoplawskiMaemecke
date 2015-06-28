@@ -22,8 +22,10 @@
                 <td><%= group.members ? group.members.length : 0 %></td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-xs btn-danger js-leave-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
+                    <button type="button" class="btn btn-xs btn-danger js-leave-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button>
+                    <button type="button" class="btn btn-xs btn-success js-add-to-group" data-toggle="modal" data-target="#inviteUserModal" data-id="<%= group.id %>"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></button>
                   </div>
+                </td>
               </tr>
               <% }); %>
             </tbody>
@@ -47,6 +49,29 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="inviteUserModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="addModalLabel">User zur Gruppe einladen</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="inviteUserId">UserID</label>
+              <input type="text" class="form-control" id="inviteUserId" placeholder="UserID">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="button" class="btn btn-primary js-invite-user">Einladen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 <%- include('footer') %>

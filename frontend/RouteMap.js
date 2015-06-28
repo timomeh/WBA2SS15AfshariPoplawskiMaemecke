@@ -7,7 +7,11 @@ var EventsController = require('./controller/EventsController');
 
 
 router.get('/', function(req, res) {
-  res.render('test', { name: 'Welt' });
+  res.render('home');
+});
+
+router.get('/notifications', function(req, res) {
+  res.render('notifications');
 });
 
 
@@ -25,6 +29,7 @@ router.get('/logout', UsersController.logout);
 /*==========  Groups  ==========*/
 
 router.get('/groups', GroupsController.list);
+router.post('/groups/invite', GroupsController.invite);
 
 
 
