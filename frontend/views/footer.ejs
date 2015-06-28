@@ -1,5 +1,6 @@
 	<% if (user !== undefined) { %>
 	<script>var userobj = { name: "<%= user.name %>", id: <%= user.id %> }</script><% } %>
+	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script src="/markup.min.js"></script>

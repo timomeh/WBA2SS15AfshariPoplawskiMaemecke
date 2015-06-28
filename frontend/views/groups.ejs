@@ -20,7 +20,10 @@
                 <td><%= group.id %></td>
                 <td><%= group.name %></td>
                 <td><%= group.members ? group.members.length : 0 %></td>
-                <td><button type="button" class="btn btn-xs btn-danger js-leave-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-xs btn-danger js-leave-group" data-id="<%= group.id %>"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></button></td>
+                  </div>
               </tr>
               <% }); %>
             </tbody>
