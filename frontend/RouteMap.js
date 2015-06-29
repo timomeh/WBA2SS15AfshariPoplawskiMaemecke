@@ -4,6 +4,7 @@ var router = express.Router();
 var UsersController = require('./controller/UsersController');
 var GroupsController = require('./controller/GroupsController');
 var EventsController = require('./controller/EventsController');
+var NotificationsController = require('./controller/NotificationsController');
 
 
 router.get('/', function(req, res) {
@@ -13,6 +14,11 @@ router.get('/', function(req, res) {
 router.get('/notifications', function(req, res) {
   res.render('notifications');
 });
+
+// Yeah, this could be a .delete
+// But I want to show that the client doesn't
+// need to be REST compliant.
+router.post('/notifications/delete', NotificationsController.delete);
 
 
 /*==========  User  ==========*/
