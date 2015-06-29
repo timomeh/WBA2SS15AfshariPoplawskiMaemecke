@@ -62,12 +62,13 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
 
   // If session exists, user can access all pages
-  if (req.session.user) {
+  if (req.session.user && req.originalUrl !== '/logout') {
     // Append Notifications to user session
     notify.fromUser(req.session.user.id, function(err, notifications) {
       var unread = notifications.filter(function(notification) {
         return notification.unread;
       });
+
       req.session.user.unreadNotifications = unread.length;
       req.session.user.notifications = notifications;
     });

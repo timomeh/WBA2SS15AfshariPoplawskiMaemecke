@@ -17,7 +17,7 @@ exports.showLogin = function(req, res) {
 
 exports.login = function(req, res) {
   if (req.session.user) return res.redirect('/');
-  http.get("http://localhost:8888/api/users/" + req.body.id, function(userRes) {
+  http.get("http://localhost:8888/api/users/" + req.body.name, function(userRes) {
     var body = '';
     userRes.on('data', function(chunk) {
       body += chunk;
