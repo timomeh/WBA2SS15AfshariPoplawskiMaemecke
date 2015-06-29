@@ -1,22 +1,29 @@
 <%- include('header') %>
 
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div class="col-xs-12"><h1>Neuen User anlegen</h1></div>
-  </div>
-  <div class="row">
-    <div class="col-xs-4">
-      <form method="POST" action="/signup">
-        <div class="form-group">
-          <label for="userName">Username</label>
-          <input type="text" class="form-control" id="userName" name="name" placeholder="Username">
+    <div class="col-md-4 col-md-offset-4 col-centered">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Registrieren</h3>
         </div>
-        <div class="form-group">
-              <label for="password">Passwort</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="*****">
-            </div>     
-        <button type="submit" class="btn btn-default">Einloggen</button>
-      </form>
+        <div class="panel-body">
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger" role="alert"><%= errmessage %></div>
+          <% } %>
+          <form method="POST" action="/signup">
+            <div class="form-group">
+              <label for="userName">Username</label>
+              <input type="text" class="form-control" id="userName" name="name" placeholder="Username">
+            </div>
+            <div class="form-group">
+                  <label for="password">Passwort</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="*****">
+                </div>     
+            <button type="submit" class="btn btn-default">Registrieren</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

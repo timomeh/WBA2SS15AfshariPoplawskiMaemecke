@@ -12,13 +12,14 @@ router.post('/', function (req, res) {
   // Check all users if username already assigned
   db.keys('user:*', function(err, keys) {
     db.mget(keys, function(err, users) {
+      if (users === undefined) {
+        users = [];
+      }
       users = users.map(function(user) {
         return JSON.parse(user);
       });
       var assigned = false;
-      console.log(users);
       users.forEach(function(user) {
-        console.log(user.name);
         if (user.name === req.body.name) assigned = true;
       });
 
@@ -38,15 +39,28 @@ router.post('/', function (req, res) {
 });
 
 // User ausgeben
-router.get('/:id', function (req, res) {
-  var id = req.params.id;
-  db.get('user:' + id, function (err, user) {
-    if (user === null) { // Wenn User nicht in Datenbank gefunden
-      res.status(404);
-      return res.send('User nicht gefunden.');
-    }
- 
-    res.json(JSON.parse(user));
+router.get('/:name', function (req, res) {
+  var name = req.params.name;
+  db.keys('user:*', function(err, keys) {
+    db.mget(keys, function(err, users) {
+      users = users.map(function(user) {
+        return JSON.parse(user);
+      });
+
+      var user;
+      users.forEach(function(u) {
+        if (u.name === name) {
+          user = u;
+        }
+      });
+
+      if (user === undefined) {
+        res.status(404);
+        return res.send('User nicht gefunden.');
+      }
+
+      res.json(user);
+    });
   });
 });
  
