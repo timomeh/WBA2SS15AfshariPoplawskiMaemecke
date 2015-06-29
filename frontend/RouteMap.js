@@ -206,6 +206,10 @@ router.post('/signup', function(req, res) {
   
 }); 
 
+router.get('/events/:id', function(req, res) {
+  res.render('event-single');
+});
+
 
 
 module.exports = router;
