@@ -37,7 +37,9 @@ router.post('/groups/invite', GroupsController.invite);
 
 router.get('/events', EventsController.list);
 router.get('/events/new', EventsController.showCreate);
-router.post('/events/new', EventsController.create); 
+router.post('/events/new', EventsController.create);
+router.get('/events/:id', EventsController.show); 
+
 
 
 module.exports = router;

@@ -84,3 +84,7 @@ exports.create = function(req, res) {
   post_req.end();
   
 };
+
+exports.show = function(req, res) {
+  res.render('event-single');
+};
