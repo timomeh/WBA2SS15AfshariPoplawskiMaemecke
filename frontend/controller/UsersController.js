@@ -17,7 +17,7 @@ exports.showLogin = function(req, res) {
 
 exports.login = function(req, res) {
   if (req.session.user) return res.redirect('/');
-  http.get("http://localhost:8888/api/users/" + req.body.id, function(userRes) {
+  http.get("http://localhost:8888/api/users/" + req.body.name, function(userRes) {
     var body = '';
     userRes.on('data', function(chunk) {
       body += chunk;
@@ -46,7 +46,10 @@ exports.logout = function(req, res) {
 
 exports.create = function(req, res) {
 
-  
+  if (req.body.password === undefined || req.body.password === '') {
+    return res.render('signup', { error: 'NOPASSWD', errmessage: 'Kein Passwort angegeben' });
+  }
+
   var post_options = {
       host: 'localhost',
       port: '8888',
@@ -58,8 +61,6 @@ exports.create = function(req, res) {
       }
   };
 
-
-  // Set up teh request
   var post_req = http.request(post_options, function(post_res) {
     post_res.setEncoding('utf8');
     var body = '';
@@ -70,15 +71,12 @@ exports.create = function(req, res) {
     post_res.on('end', function() {
       var returns = JSON.parse(body);
 
-      if(Array.isArray(returns)) {
-        console.log('Success');
-        console.log(returns);
-        res.end();
-      } else {
-        console.log('Failure');
-         res.redirect('/login');
+      if (post_res.statusCode === 409) {
+        return res.render('signup', { error: 'ALREADYASSIGNED', errmessage: 'Username bereits vergeben' });
       }
-    })
+
+      res.redirect('/login');
+    });
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   }); 

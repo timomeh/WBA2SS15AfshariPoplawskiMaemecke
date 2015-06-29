@@ -9,26 +9,58 @@ var db = redis.createClient();
 
 // User Anlegen
 router.post('/', function (req, res) {
-  db.incr('userIDs', function (err, id) {
-    var user = req.body;
-    user.id = id;
-    db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
-    	
-      res.status(201).json(user); 
-	 });
+  // Check all users if username already assigned
+  db.keys('user:*', function(err, keys) {
+    db.mget(keys, function(err, users) {
+      if (users === undefined) {
+        users = [];
+      }
+      users = users.map(function(user) {
+        return JSON.parse(user);
+      });
+      var assigned = false;
+      users.forEach(function(user) {
+        if (user.name === req.body.name) assigned = true;
+      });
+
+      if (assigned) {
+        return res.status(409).json({ message: 'Username already assigned'});
+      }
+
+      db.incr('userIDs', function (err, id) {
+        var user = req.body;
+        user.id = id;
+        db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
+          res.status(201).json(user); 
+       });
+      });
+    });
   });
 });
 
 // User ausgeben
-router.get('/:id', function (req, res) {
-  var id = req.params.id;
-  db.get('user:' + id, function (err, user) {
-    if (user === null) { // Wenn User nicht in Datenbank gefunden
-      res.status(404);
-      return res.send('User nicht gefunden.');
-    }
- 
-    res.json(JSON.parse(user));
+router.get('/:name', function (req, res) {
+  var name = req.params.name;
+  db.keys('user:*', function(err, keys) {
+    db.mget(keys, function(err, users) {
+      users = users.map(function(user) {
+        return JSON.parse(user);
+      });
+
+      var user;
+      users.forEach(function(u) {
+        if (u.name === name) {
+          user = u;
+        }
+      });
+
+      if (user === undefined) {
+        res.status(404);
+        return res.send('User nicht gefunden.');
+      }
+
+      res.json(user);
+    });
   });
 });
  
