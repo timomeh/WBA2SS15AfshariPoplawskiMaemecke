@@ -51,7 +51,7 @@ exports.markAsRead = function(userId, notificationId, cb) {
   });
 };
 
-exports.deleteNotification = function(userId, notificationId, cb) {
+exports.delete = function(userId, notificationId, cb) {
   var key = 'notifications:user:' + userId + ':' + notificationId;
   db.del(key, function(err, ret) {
     cb(err);

@@ -8,6 +8,17 @@
               <%= notification.message %>
             </div>
             <div class="panel-footer">
+              <% if (notification.type === 'GROUPINVITE') { %>
+                <form action="/groups/invite/respond" method="POST">
+                  <input type="hidden" name="groupId" value="<%= notification.groupId %>">
+                  <input type="hidden" name="notifyId" value="<%= notification.id %>">
+                  <input type="hidden" name="fromId" value="<%= notification.fromId %>">
+                  <div class="btn-group">
+                    <button name="type" value="accept" class="js-delete-notification btn btn-success btn-sm">Akzeptieren</button>
+                    <button name="type" value="decline" class="js-delete-notification btn btn-warning btn-sm">Ablehnen</button>
+                  </div>
+                </form>
+              <% } %>
               <button type="button" class="js-delete-notification btn btn-danger btn-sm" data-id="<%= notification.id %>">Löschen</button>
             </div>
           </div>

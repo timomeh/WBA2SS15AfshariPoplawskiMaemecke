@@ -30,6 +30,7 @@ router.post('/', function (req, res) {
       db.incr('userIDs', function (err, id) {
         var user = req.body;
         user.id = id;
+        user.groups = [];
         db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
           res.status(201).json(user); 
        });

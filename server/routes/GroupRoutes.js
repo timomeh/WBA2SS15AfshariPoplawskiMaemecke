@@ -64,7 +64,7 @@ router.get('/:id', function (req, res) {
       return res.status(500).json({ message: 'Database read error', err: err });
     if (group === null) { // Wenn Gruppe nicht in Datenbank gefunden
       res.status(404);
-      return res.send('Gruppe nicht gefunden.')
+      return res.send('Gruppe nicht gefunden.');
     }
 
     res.json(JSON.parse(group));
@@ -123,11 +123,18 @@ router.post('/:id/member', function (req, res) {
         group.members = [];
 
       group.members.push({ id: user.id });
+      user.groups.push({ id: id });
 
       db.set('group:' + id, JSON.stringify(group), function (err, saved) {
         if (err)
           return res.status(500).json({ message: 'Database write error', err: err });
-        res.json(group);
+
+        db.set('user:' + member.id, JSON.stringify(user), function (err, ret) {
+          if (err)
+            return res.status(500).json({ message: 'Database write error', err: err });
+
+          res.json(group);
+        });
       });
     });
   });

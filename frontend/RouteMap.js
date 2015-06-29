@@ -30,6 +30,7 @@ router.get('/logout', UsersController.logout);
 
 router.get('/groups', GroupsController.list);
 router.post('/groups/invite', GroupsController.invite);
+router.post('/groups/invite/respond', GroupsController.respondInvite);
 
 
 

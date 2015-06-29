@@ -53,8 +53,9 @@ $(function() {
 
   $('.js-invite-user').on('click', function() {
     var data = {
-      userId: $('#inviteUserId').val(),
-      groupId: inviteToGroupId
+      username: $('#inviteUserName').val(),
+      groupId: inviteToGroupId,
+      fromId: userobj.id
     };
     ajaxReq('POST', 'http://localhost:8000/groups/invite', data, function(err, data) {
       if (err) return alert("Fehler beim Einladen (AJAX Error)");
