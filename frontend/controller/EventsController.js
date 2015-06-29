@@ -67,7 +67,7 @@ exports.create = function(req, res) {
       if( (typeof returns === 'object') && (returns !== null)) {
         console.log('Success');
         console.log(returns);
-        res.end();
+        res.redirect('/events/' + returns.id);
       } else {
         console.log('Failure');
         res.end();
@@ -86,5 +86,31 @@ exports.create = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  res.render('event-single');
+  // GET request for all events
+  http.get("http://localhost:8888/api/events/" + req.params.id, function(eventRes) {
+    var body = '';
+
+    // While still recieving data, append current chunk to body
+    eventRes.on('data', function(chunk) {
+      body += chunk;
+    });
+
+    // Data transfer has ended, do something with the data
+    eventRes.on('end', function() {
+      var event = JSON.parse(body);
+
+      if((typeof event === 'object') && (event !== null)) {
+        // Render frontend with the recieved events
+        res.render('event-single', { event: event });
+      } else {
+        //Set array empty to prevent error from being rendered in Client
+        //Should also render a 404 page
+        events= [];
+      }
+
+      
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  });
 };
