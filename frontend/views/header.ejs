@@ -3,35 +3,52 @@
 <head>
 	<meta charset="UTF-8">
 	<title>friendar</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
+  <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">friendar</a>
-      <% if (user) { %><p class="navbar-text">Eingeloggt als <%= user.Name %></p><% } %>
+      <a class="navbar-brand" href="/">friendar</a>
+      <% if (user) { %><p class="navbar-text">Eingeloggt als <%= user.name %></p><% } %>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
         <% if (user) { %>
           <li><a href="/events">Events</a></li>
           <li><a href="/groups">Gruppen</a></li>
           <li><a href="/user">User</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" id="notificationMenu" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> <% if (user.notifications) { %><span class="js-notify-unread badge"><%= user.unreadNotifications %></span><% } %>
+            </a>
+            <ul class="js-notifications dropdown-menu" aria-labelledby="notificationMenu">
+              <% if (user.notifications) { %>
+              <% user.notifications.forEach(function(notification) { %>
+              <li class="js-notify-item <% if (notification.unread) { %>is-unread <% } %>" data-id="<%= notification.id %>"><a href="/notifications#not<%= notification.id %>"><%= notification.message %></a></li>
+              <% }); %>
+              <li role="separator" class="divider"></li>
+              <li><a href="/notifications">Alle Beanchrichtigungen</a></li>
+              <% } else { %>
+                Du hast keine Benachrichtigungen.
+              <% } %>
+            </ul>
+          </li>
         <% } else { %>
           <li><a href="/signup">Registrieren</a></li>
         <% } %>
       </ul>
     </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+  </div><!-- /.container -->
 </nav>

@@ -6,6 +6,8 @@ $(function() {
     "<td><button type='button' class='btn btn-xs btn-danger js-leave-group' data-id='{{id}}'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></button></td>"+
     "</tr>";
 
+  var helpText = '<span class="help-block">{{message}}</span>';
+
   $('#newGroup').on('submit', function(e) {
     e.preventDefault();
     var data = { name: $('#inputGroupName').val() };
@@ -31,4 +33,59 @@ $(function() {
       $this.replaceWith(rendered);
     });
   });
-})
+
+  $('#inviteUserModal').on('hidden.bs.modal', function(e) {
+    $('.js-invite-user').removeClass('btn-success').addClass('btn-primary').text('Einladen').removeAttr('disabled');
+    $('.js-invite-user').find('.glyphicon').remove();
+    $('#inviteUserId').val('');
+  });
+
+  var inviteToGroupId;
+  $('#inviteUserModal').on('show.bs.modal', function(e) {
+    inviteToGroupId = $(e.relatedTarget).attr('data-id');
+  });
+
+  $('#inviteUserId').on('focus', function() {
+    var $formGroup = $(this).parent('.form-group');
+    $formGroup.removeClass('has-error');
+    $formGroup.find('.help-block').remove();
+  });
+
+  $('.js-invite-user').on('click', function() {
+    var data = {
+      userId: $('#inviteUserId').val(),
+      groupId: inviteToGroupId
+    };
+    ajaxReq('POST', 'http://localhost:8000/groups/invite', data, function(err, data) {
+      if (err) return alert("Fehler beim Einladen (AJAX Error)");
+      if (data) {
+        if (data.error === 'USERNOTFOUND') {
+          var help = Mark.up(helpText, { message: 'Dieser User existiert nicht' });
+          $('#inviteUserId').parent('.form-group').addClass('has-error');
+          $('#inviteUserId').parent('.form-group').append(help);
+        }
+        else if (data.error === 'SAMEUSER') {
+          var help = Mark.up(helpText, { message: 'Du kannst dich nicht selbst einladen' });
+          $('#inviteUserId').parent('.form-group').addClass('has-error');
+          $('#inviteUserId').parent('.form-group').append(help);
+        }
+
+        else if (data.error === 'ALREADYINGROUP') {
+          var help = Mark.up(helpText, { message: 'Dieser User ist bereits Mitglied in der Gruppe' });
+          $('#inviteUserId').parent('.form-group').addClass('has-error');
+          $('#inviteUserId').parent('.form-group').append(help);
+        }
+
+        else if (data.error === 'GROUPNOTFOUND') {
+          var help = Mark.up(helpText, { message: 'Die Gruppe, in die der User hinzugefügt werden soll, existiert nicht' });
+          $('#inviteUserId').parent('.form-group').addClass('has-error');
+          $('#inviteUserId').parent('.form-group').append(help);
+        }
+      }
+
+      else {
+        $('.js-invite-user').removeClass('btn-primary').addClass('btn-success').text('Abgeschickt!').prepend('<span class="glyphicon glyphicon glyphicon-ok"></span> ').attr('disabled', 'disabled');
+      }
+    });
+  });
+});

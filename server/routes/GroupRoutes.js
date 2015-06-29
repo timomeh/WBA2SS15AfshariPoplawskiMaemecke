@@ -27,6 +27,7 @@ router.post('/', function (req, res) {
 
     var group = req.body;
     group.id = id;
+    group.members = [];
 
     db.set('group:' + id, JSON.stringify(group), function (err, newGroup) {
       if (err) return res.json(err);
@@ -176,6 +177,9 @@ router.get('/:id/member', function (req, res) {
   db.get('group:' + id, function (err, group) {
     if (err)
       return res.status(500).json({ message: 'Database read error', err: err });
+    if (group === null)
+      return res.status(404).json({ message: 'Group does not exist' });
+
     group = JSON.parse(group);
 
     if (!group.members || group.members.length === 0)
