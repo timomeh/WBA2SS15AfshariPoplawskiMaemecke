@@ -9,13 +9,31 @@ var db = redis.createClient();
 
 // User Anlegen
 router.post('/', function (req, res) {
-  db.incr('userIDs', function (err, id) {
-    var user = req.body;
-    user.id = id;
-    db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
-    	
-      res.status(201).json(user); 
-	 });
+  // Check all users if username already assigned
+  db.keys('user:*', function(err, keys) {
+    db.mget(keys, function(err, users) {
+      users = users.map(function(user) {
+        return JSON.parse(user);
+      });
+      var assigned = false;
+      console.log(users);
+      users.forEach(function(user) {
+        console.log(user.name);
+        if (user.name === req.body.name) assigned = true;
+      });
+
+      if (assigned) {
+        return res.status(409).json({ message: 'Username already assigned'});
+      }
+
+      db.incr('userIDs', function (err, id) {
+        var user = req.body;
+        user.id = id;
+        db.set('user:' + user.id, JSON.stringify(user), function (err, newUser) {
+          res.status(201).json(user); 
+       });
+      });
+    });
   });
 });
 
