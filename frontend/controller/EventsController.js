@@ -2,6 +2,11 @@ var http = require('http');
 
 
 exports.showCreate = function(req, res) {
+  http.get('http://localhost:8888/api/users/' + req.session.user.name, function(eventRes) {
+    console.log(eventRes);
+  });
+
+  console.log(req.session.user);
   res.render('event-new', { name: 'Welt' });
 };
 

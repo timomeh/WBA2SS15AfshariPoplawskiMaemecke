@@ -5,28 +5,18 @@
 
 <div class="container-fluid">
   <div class="row">
-      <div class="col-xs-12"><h2><%= event.name %></h2></div>
+      <div class="col-xs-12"><h3><%= event.name %></h3></div>
   </div>
-  
-  <table class="table table-striped">
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Ort</th>
-      <th>Zeit</th>
-      <th>Teilnahme ändern</th>
-    </tr>
-    
-      <tr>
-        <td><%= event.id %></td>
-        <td><%= event.name %></td>
-        <!-- Implement those two later, when Event structure is unified -->
-        <td><%= event.location %></td>
-        <td><%= event.time %> Uhr</td>
-        <td><button type="button" class="btn btn-danger">absagen</button></td>
-      </tr>
-    
-  </table>
+
+  <dl class="dl-horizontal">
+    <dt>Ort</dt>
+    <dd><%= event.location %></dd>
+    <dt>Datum</dt>
+    <dd><%= event.date %></dd>
+    <dt>Uhrzeit</dt>
+    <dd><%= event.time %> Uhr</dd>
+    <button type="button" class="btn btn-danger">absagen</button>
+  </dl>
 </div>
 
 <%- include('footer') %>
