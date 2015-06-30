@@ -40,7 +40,9 @@ exports.login = function(req, res) {
 };
 
 exports.logout = function(req, res) {
+  console.log('logout');
   req.session.user = undefined;
+  console.log(req.session);
   res.redirect('/login');
 };
 

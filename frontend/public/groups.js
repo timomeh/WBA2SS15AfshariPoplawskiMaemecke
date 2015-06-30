@@ -3,7 +3,10 @@ $(function() {
     "<td>{{id}}</td>"+
     "<td>{{name}}</td>"+
     "<td>{{members.length}}</td>"+
-    "<td><button type='button' class='btn btn-xs btn-danger js-leave-group' data-id='{{id}}'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></button></td>"+
+    "<td><div class='btn-group'>"+
+    "<button type='button' class='btn btn-xs btn-danger js-leave-group' data-id='{{id}}'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></button>"+
+    "<button type='button' class='btn btn-xs btn-success js-add-to-group' data-toggle='modal' data-target='#inviteUserModal' data-id='{{id}}'><span class='glyphicon glyphicon-log-in' aria-hidden='true'></span></button>"+
+    "</div></td>"+
     "</tr>";
 
   var helpText = '<span class="help-block">{{message}}</span>';

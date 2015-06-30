@@ -25,6 +25,12 @@ exports.fromUser = function(userId, cb) {
     db.mget(keys, function (err, notifications) {
       if (err) return cb(err);
 
+      // Sometimes there are notifications
+      // with value "null" in the database, for
+      // a short period of time. Don't know why,
+      // but I'd just filter it out.
+      notifications = notifications.filter(function (notification) { return JSON.parse(notification) });
+
       // Value als JSON parsen
       notifications = notifications.map(function (notification) { return JSON.parse(notification) });
 

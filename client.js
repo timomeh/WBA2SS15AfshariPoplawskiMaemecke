@@ -64,7 +64,7 @@ app.use(function(req, res, next) {
 app.use(function(req, res, next) {
 
   // If session exists, user can access all pages
-  if (req.session.user && req.originalUrl !== '/logout') {
+  if (req.session.user) {
     // Append Notifications to user session
     notify.fromUser(req.session.user.id, function(err, notifications) {
       var unread = notifications.filter(function(notification) {

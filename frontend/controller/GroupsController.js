@@ -77,7 +77,6 @@ exports.respondInvite = function(req, res) {
         var notification = {
           message: req.session.user.name + " hat die Einladung angenommen!"
         };
-        console.log(req.body.fromId);
         notify.delete(userid, notifyId, function() {
           notify.toUser(req, req.body.fromId, notification, function(err) {
             if (err) return res.json({ error: 'some error occured' });
