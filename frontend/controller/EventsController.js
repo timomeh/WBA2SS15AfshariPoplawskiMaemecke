@@ -7,7 +7,17 @@ exports.showCreate = function(req, res) {
     console.log(eventRes);
   });
 
-  console.log(req.session.user);
+  // TODO: In View, only present the Groups the User is member of
+  var groupIDs = req.session.user.groups;
+  var groupNames = '';
+
+  // TODO: This will not work because of asznc foo, promise or something?
+  for each (singleID in groupIDs) {
+		// TODO: Perform GET request for every single Group in groupIDs	  
+  }
+  // TODO: If the user is not a member of any Groups, let him creat a new one right away
+  console.log("In showCreate");
+  console.log(req.session.user.groups);
 	  res.render('event-new');
 };
 
@@ -77,6 +87,7 @@ exports.create = function(req, res) {
 
 	// Send Notification to members of Gruop in which the Event was created
 	// TODO: Get GroupID
+	// console.log(req.body.groups);
 	// TODO: Get IDs of Users in Group
 	// TODO: Send Notification to every User
       } else {
