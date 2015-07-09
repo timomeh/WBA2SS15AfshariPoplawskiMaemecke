@@ -36,15 +36,13 @@ exports.showCreate = function(req, res) {
 			// TODO: Do something with this error
 			if(err) console.log('There was an error');
 			else console.log(allGroups);
+			res.render('event-new', {userGroups: allGroups});
 	});
 
 
 
   // TODO: If the user is not a member of any Groups, let him creat a new one right away
 	
-	console.log("In showCreate");
-  //console.log(req.session.user.groups);
-	res.render('event-new', {userGroups: allGroups});
 
 };
 
