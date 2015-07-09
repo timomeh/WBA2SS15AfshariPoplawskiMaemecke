@@ -9,17 +9,21 @@ exports.showCreate = function(req, res) {
     //console.log(eventRes);
   });
 
-  // TODO: In View, only present the Groups the User is member of
   var groupIDs = req.session.user.groups;
   var allGroups = [];
 	console.log(groupIDs);
 	console.log(groupIDs[0]);
 	console.log(groupIDs.length);
 
-	
+	// Get all groups the given user is a member of
+	// This needs some GET request to the service and therefore
+	// uses async.lib
+	// The page is not rendered before all Groups are recieved.	
+	// TODO: Render a different view when the User is not member of any groups
 	async.each(groupIDs, function(singleID, callback) {
-		console.log(singleID.id);
 		var groupBody = '';
+
+		// Get a single Group by its ID
 		http.get('http://localhost:8888/api/groups/' + singleID.id, function(groupRes) {
 			groupRes.on('data', function(chunk) {
 				groupBody += chunk;
@@ -28,14 +32,16 @@ exports.showCreate = function(req, res) {
 			groupRes.on('end', function() {
 				allGroups.push(JSON.parse(groupBody));
 				console.log(allGroups);
-				console.log('Iteration done');
 			});
+
+			// This iteration is done, let async.lib know
 			callback();
 		});
-	}, function(err) {
+	}, function(err) { // Final callback, all iterations finished
 			// TODO: Do something with this error
 			if(err) console.log('There was an error');
-			else console.log(allGroups);
+
+			// Render event-new.ejs and send all Groups of the given user
 			res.render('event-new', {userGroups: allGroups});
 	});
 
