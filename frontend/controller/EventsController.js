@@ -44,7 +44,7 @@ exports.showCreate = function(req, res) {
 	
 	console.log("In showCreate");
   //console.log(req.session.user.groups);
-	res.render('event-new');
+	res.render('event-new', {userGroups: allGroups});
 
 };
 

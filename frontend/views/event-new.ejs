@@ -39,4 +39,8 @@
   </div>
 </div>
 
+<% userGroups.forEach(function (group) { %>
+	<p><%= group.name %> </p>
+<% }); %>
+
 <%- include('footer') %>
