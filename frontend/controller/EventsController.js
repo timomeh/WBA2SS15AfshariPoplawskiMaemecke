@@ -1,4 +1,5 @@
 var http = require('http');
+var notify = require('../NotificationHelper');
 
 
 exports.showCreate = function(req, res) {
@@ -73,6 +74,11 @@ exports.create = function(req, res) {
         console.log('Success');
         console.log(returns);
         res.redirect('/events/' + returns.id);
+
+	// Send Notification to members of Gruop in which the Event was created
+	// TODO: Get GroupID
+	// TODO: Get IDs of Users in Group
+	// TODO: Send Notification to every User
       } else {
         console.log('Failure');
         res.end();
