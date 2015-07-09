@@ -1,5 +1,6 @@
 var http = require('http');
 var notify = require('../NotificationHelper');
+var async = require('async');
 
 
 exports.showCreate = function(req, res) {
@@ -10,12 +11,13 @@ exports.showCreate = function(req, res) {
 
   // TODO: In View, only present the Groups the User is member of
   var groupIDs = req.session.user.groups;
-  var groupNames = '';
+  var allGroups = [];
 	console.log(groupIDs);
 	console.log(groupIDs[0]);
+	console.log(groupIDs.length);
 
-  // TODO: This will not work because of asznc foo, promise or something?
- 	groupIDs.forEach(function(singleID) {
+	
+	async.each(groupIDs, function(singleID, callback) {
 		console.log(singleID.id);
 		var groupBody = '';
 		http.get('http://localhost:8888/api/groups/' + singleID.id, function(groupRes) {
@@ -23,13 +25,20 @@ exports.showCreate = function(req, res) {
 				groupBody += chunk;
 			});
 
-			groupRes.on('end', function(){
-				console.log(JSON.parse(groupBody));
+			groupRes.on('end', function() {
+				allGroups.push(JSON.parse(groupBody));
+				console.log(allGroups);
+				console.log('Iteration done');
 			});
+			callback();
 		});
+	}, function(err) {
+			// TODO: Do something with this error
+			if(err) console.log('There was an error');
+			else console.log(allGroups);
 	});
 
-			
+
 
   // TODO: If the user is not a member of any Groups, let him creat a new one right away
 	
