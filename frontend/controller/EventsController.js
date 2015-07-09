@@ -7,7 +7,7 @@ exports.showCreate = function(req, res) {
   });
 
   console.log(req.session.user);
-  res.render('event-new', { name: 'Welt' });
+	  res.render('event-new');
 };
 
 
