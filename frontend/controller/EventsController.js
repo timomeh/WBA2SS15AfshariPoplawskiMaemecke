@@ -4,23 +4,40 @@ var notify = require('../NotificationHelper');
 
 exports.showCreate = function(req, res) {
   http.get('http://localhost:8888/api/users/' + req.session.user.name, function(eventRes) {
-    console.log(eventRes);
+		//TODO: Fetch the chunks
+    //console.log(eventRes);
   });
 
   // TODO: In View, only present the Groups the User is member of
   var groupIDs = req.session.user.groups;
   var groupNames = '';
+	console.log(groupIDs);
+	console.log(groupIDs[0]);
 
   // TODO: This will not work because of asznc foo, promise or something?
-  for each (singleID in groupIDs) {
-		// TODO: Perform GET request for every single Group in groupIDs	  
-  }
-  // TODO: If the user is not a member of any Groups, let him creat a new one right away
-  console.log("In showCreate");
-  console.log(req.session.user.groups);
-	  res.render('event-new');
-};
+ 	groupIDs.forEach(function(singleID) {
+		console.log(singleID.id);
+		var groupBody = '';
+		http.get('http://localhost:8888/api/groups/' + singleID.id, function(groupRes) {
+			groupRes.on('data', function(chunk) {
+				groupBody += chunk;
+			});
 
+			groupRes.on('end', function(){
+				console.log(JSON.parse(groupBody));
+			});
+		});
+	});
+
+			
+
+  // TODO: If the user is not a member of any Groups, let him creat a new one right away
+	
+	console.log("In showCreate");
+  //console.log(req.session.user.groups);
+	res.render('event-new');
+
+};
 
 exports.list = function(req, res) {
   // GET request for all events
