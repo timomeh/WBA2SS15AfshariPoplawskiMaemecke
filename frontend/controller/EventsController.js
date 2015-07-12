@@ -23,6 +23,7 @@ exports.showCreate = function(req, res) {
 	async.each(groupIDs, function(singleID, callback) {
 		var groupBody = '';
 
+
 		// Get a single Group by its ID
 		http.get('http://localhost:8888/api/groups/' + singleID.id, function(groupRes) {
 			groupRes.on('data', function(chunk) {
@@ -111,16 +112,33 @@ exports.create = function(req, res) {
       var returns = JSON.parse(body);
 
       if( (typeof returns === 'object') && (returns !== null)) {
-        console.log('Success');
+       	
+				// Debugs
+				console.log('Success');
         console.log(returns);
+				console.log("GroupID is " + returns.groupid);
+				
+				// Send Notification to members of Gruop in which the Event was created
+					
+				var groupBody = '';
+				// Get a single Group by its ID
+				http.get('http://localhost:8888/api/groups/' + returns.groupid, function(groupRes) {
+					groupRes.on('data', function(chunk) {
+						groupBody += chunk;
+					});
+
+					groupRes.on('end', function() {
+						console.log("I got the whole Group: " + groupBody);
+					});
+				});
+
+				// TODO: Get IDs of Users in Group
+				// TODO: Send Notification to every User
+
+				// Send respons after everything is done
         res.redirect('/events/' + returns.id);
 
-	// Send Notification to members of Gruop in which the Event was created
-	// TODO: Get GroupID
-	// console.log(req.body.groups);
-	// TODO: Get IDs of Users in Group
-	// TODO: Send Notification to every User
-      } else {
+	      } else {
         console.log('Failure');
         res.end();
       }
