@@ -131,20 +131,26 @@ exports.create = function(req, res) {
 						console.log("I got the whole Group: " + groupBody);
 					
 						groupBody = JSON.parse(groupBody);	
-						async.each(groupBody.members, function(singleMember, callback) {
 
+						async.each(groupBody.members, function(singleMember, callback) {
+							
 							// Debug
 							console.log(singleMember.id);
 							
-							//TODO: Do not send a notification to self
 							//TODO: Refine contents of notification
 							var notification = {
 								message: "In einer deiner Gruppen wurde ein neues Event erstellt"
 							};
-							notify.toUser(req, singleMember.id, notification, function(err) {
-								if(err) console.log(err);
-								callback();			
-							});
+
+							// Only send the notification if the current user is not the user
+							// who created the event
+							if(!(singleMember.id === req.session.user.id)) {
+								notify.toUser(req, singleMember.id, notification, function(err) {
+									if(err) console.log(err);
+								});
+							}
+
+							callback();
 
 						}, function(err) {
 							if (err) console.log(err);				
