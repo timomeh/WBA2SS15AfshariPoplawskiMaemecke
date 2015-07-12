@@ -116,8 +116,6 @@ exports.create = function(req, res) {
 
       if( (typeof returns === 'object') && (returns !== null)) {
        	
-				// TODO: Add creating user as first going member to the event
-
 				// Debugs
 				console.log('Success');
         console.log(returns);
@@ -215,6 +213,62 @@ exports.show = function(req, res) {
 };
 
 exports.respondInvite = function(req, res) {
+	// Variables
+	var groupId = req.body.groupId;
 	//TODO: Handle the invite response
+	
+	// DEBUG
 	console.log("respondInvite called");
+	console.log(req.body);
+		
+	if(req.body.type === 'notGoing') {
+		// TODO: Is there something that needs to happen if someone isn't going?
+	} else {
+		// TODO: Add the current user to the event's going users
+		
+		var groupBody = '';
+
+		// GET request to retrieve the current list of going members
+		// We well append the current user to it and the send it via a PUT Method back to
+		// the server
+		http.get('http://localhost:8888/api/events/' + groupId, function(eventRes) {
+			eventRes.on('data', function(groupChunk) {
+				groupBody += groupChunk;
+			});
+			
+			// GET request has finished	
+			eventRes.on('end', function() {
+				console.log(groupBody);
+			/*	
+				  var post_options = {
+				    host: 'localhost',
+				    port: '8888',
+				    path: '/api/events/' + groupId,
+				    method: 'PUT',
+				    headers: {
+				        'Content-Type': 'application/json',
+				        'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
+				  	}
+				  };
+				
+				  var put_req = http.request(post_options, function(post_res) {
+				  	post_res.setEncoding('utf8');
+				  	var body = '';
+				  	post_res.on('data', function(chunk) {
+				    	body += chunk;
+				  	});
+					});
+				
+					put_req.on('error', function(e) {
+						console.log(e.message);
+					});*/
+			});
+		});
+	
+	// TODO: Delete the Notification from the system
+		// TODO: Notify other going users that another user is going
+	}
+
+
+	res.end();
 };
