@@ -129,14 +129,32 @@ exports.create = function(req, res) {
 
 					groupRes.on('end', function() {
 						console.log("I got the whole Group: " + groupBody);
+					
+						groupBody = JSON.parse(groupBody);	
+						async.each(groupBody.members, function(singleMember, callback) {
+
+							// Debug
+							console.log(singleMember.id);
+							
+							//TODO: Do not send a notification to self
+							var notification = {
+								message: "In einer deiner Gruppen wurde ein neues Event erstellt"
+							};
+							notify.toUser(req, singleMember.id, notification, function(err) {
+								if(err) console.log(err);
+								callback();			
+							});
+
+						}, function(err) {
+							if (err) console.log(err);				
+        			res.redirect('/events/' + returns.id);
+						});
 					});
 				});
 
-				// TODO: Get IDs of Users in Group
 				// TODO: Send Notification to every User
 
-				// Send respons after everything is done
-        res.redirect('/events/' + returns.id);
+				// Send response after everything is done
 
 	      } else {
         console.log('Failure');
