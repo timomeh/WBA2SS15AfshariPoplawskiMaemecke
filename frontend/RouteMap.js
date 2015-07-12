@@ -46,7 +46,7 @@ router.get('/events', EventsController.list);
 router.get('/events/new', EventsController.showCreate);
 router.post('/events/new', EventsController.create);
 router.get('/events/:id', EventsController.show); 
-router.get('/events/invite/respond', EventsController.respondInvite);
+router.post('/events/invite/respond', EventsController.respondInvite);
 
 
 module.exports = router;
