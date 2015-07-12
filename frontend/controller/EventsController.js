@@ -238,30 +238,44 @@ exports.respondInvite = function(req, res) {
 			
 			// GET request has finished	
 			eventRes.on('end', function() {
-				console.log(groupBody);
-			/*	
-				  var post_options = {
-				    host: 'localhost',
-				    port: '8888',
-				    path: '/api/events/' + groupId,
-				    method: 'PUT',
-				    headers: {
-				        'Content-Type': 'application/json',
-				        'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
-				  	}
-				  };
+				groupBody = JSON.parse(groupBody);
 				
-				  var put_req = http.request(post_options, function(post_res) {
-				  	post_res.setEncoding('utf8');
-				  	var body = '';
-				  	post_res.on('data', function(chunk) {
-				    	body += chunk;
-				  	});
+				// Append the current user to the going users
+				var goingUsers = groupBody.going.slice();
+				var currUser = {id: req.session.user.id};
+				goingUsers.push(currUser);
+				var goingStruct = {'going': goingUsers}; // Way too tired, no idea what im doing 
+
+				// Set up the PUT request
+				// TODO: EventID instead of groupID	
+				var post_options = {
+				  host: 'localhost',
+				  port: '8888',
+				  path: '/api/events/' + groupId,
+				  method: 'PUT',
+				  headers: {
+				      'Content-Type': 'application/json',
+				      'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
+					}
+				};
+				
+				var put_req = http.request(post_options, function(post_res) {
+					post_res.setEncoding('utf8');
+					var body = '';
+					post_res.on('data', function(chunk) {
+				  	body += chunk;
 					});
+				});
 				
-					put_req.on('error', function(e) {
-						console.log(e.message);
-					});*/
+				put_req.on('error', function(e) {
+					console.log(e.message);
+				});
+				
+				// TODO: This is not properly working with the PUT request
+				// DEBUG
+				console.log(goingStruct);
+
+				put_req.write(JSON.stringify(goingUsers));
 			});
 		});
 	
