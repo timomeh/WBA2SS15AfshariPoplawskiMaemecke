@@ -137,6 +137,7 @@ exports.create = function(req, res) {
 							console.log(singleMember.id);
 							
 							//TODO: Do not send a notification to self
+							//TODO: Refine contents of notification
 							var notification = {
 								message: "In einer deiner Gruppen wurde ein neues Event erstellt"
 							};
@@ -152,9 +153,7 @@ exports.create = function(req, res) {
 					});
 				});
 
-				// TODO: Send Notification to every User
 
-				// Send response after everything is done
 
 	      } else {
         console.log('Failure');
