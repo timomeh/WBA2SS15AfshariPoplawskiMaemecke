@@ -133,13 +133,14 @@ exports.create = function(req, res) {
 						groupBody = JSON.parse(groupBody);	
 
 						async.each(groupBody.members, function(singleMember, callback) {
-							
 							// Debug
 							console.log(singleMember.id);
 							
-							//TODO: Refine contents of notification
 							var notification = {
-								message: "In einer deiner Gruppen wurde ein neues Event erstellt"
+								message: "In einer deiner Gruppen wurde ein neues Event erstellt",
+								type: "EVENTINVITE",
+								groupId: returns.groupid,
+								fromId: req.session.user.id
 							};
 
 							// Only send the notification if the current user is not the user
