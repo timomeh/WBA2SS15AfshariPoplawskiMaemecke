@@ -86,7 +86,10 @@ exports.list = function(req, res) {
 
 
 exports.create = function(req, res) {
-
+	
+	// Set the creating user as first going user
+	var going = [{id: req.session.user.id}];
+	req.body.going = going;
   
   // Set options for request
   var post_options = {
@@ -113,6 +116,8 @@ exports.create = function(req, res) {
 
       if( (typeof returns === 'object') && (returns !== null)) {
        	
+				// TODO: Add creating user as first going member to the event
+
 				// Debugs
 				console.log('Success');
         console.log(returns);
@@ -207,4 +212,9 @@ exports.show = function(req, res) {
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
   });
+};
+
+exports.respondInvite = function(req, res) {
+	//TODO: Handle the invite response
+	console.log("respondInvite called");
 };
