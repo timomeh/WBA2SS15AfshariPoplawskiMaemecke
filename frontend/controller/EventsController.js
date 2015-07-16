@@ -225,8 +225,6 @@ exports.respondInvite = function(req, res) {
 	if(req.body.type === 'notGoing') {
 		// TODO: Is there something that needs to happen if someone isn't going?
 	} else {
-		// TODO: Add the current user to the event's going users
-		
 		var groupBody = '';
 
 		// GET request to retrieve the current list of going members
@@ -285,9 +283,8 @@ exports.respondInvite = function(req, res) {
 			});
 		});
 	
-	// TODO: Delete the Notification from the system
+		// TODO: Redirect User to Event?
+		// TODO: Delete the Notification from the system
 		// TODO: Notify other going users that another user is going
 	}
-
-
 };
