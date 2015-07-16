@@ -143,7 +143,8 @@ exports.create = function(req, res) {
 								message: "In einer deiner Gruppen wurde ein neues Event erstellt",
 								type: "EVENTINVITE",
 								groupId: returns.groupid,
-								fromId: req.session.user.id
+								fromId: req.session.user.id,
+								eventId: returns.id
 							};
 
 							// Only send the notification if the current user is not the user
@@ -231,7 +232,7 @@ exports.respondInvite = function(req, res) {
 		// GET request to retrieve the current list of going members
 		// We well append the current user to it and the send it via a PUT Method back to
 		// the server
-		http.get('http://localhost:8888/api/events/' + groupId, function(eventRes) {
+		http.get('http://localhost:8888/api/events/' + req.body.eventId, function(eventRes) {
 			eventRes.on('data', function(groupChunk) {
 				groupBody += groupChunk;
 			});
@@ -239,7 +240,7 @@ exports.respondInvite = function(req, res) {
 			// GET request has finished	
 			eventRes.on('end', function() {
 				groupBody = JSON.parse(groupBody);
-				
+
 				// Append the current user to the going users
 				var goingUsers = groupBody.going.slice();
 				var currUser = {id: req.session.user.id};
@@ -247,35 +248,40 @@ exports.respondInvite = function(req, res) {
 				var goingStruct = {'going': goingUsers}; // Way too tired, no idea what im doing 
 
 				// Set up the PUT request
-				// TODO: EventID instead of groupID	
-				var post_options = {
+				var put_options = {
 				  host: 'localhost',
 				  port: '8888',
-				  path: '/api/events/' + groupId,
+				  path: '/api/events/' + req.body.eventId,
 				  method: 'PUT',
 				  headers: {
 				      'Content-Type': 'application/json',
-				      'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
+				      'Content-Length': Buffer.byteLength(JSON.stringify(goingStruct))
 					}
 				};
 				
-				var put_req = http.request(post_options, function(post_res) {
-					post_res.setEncoding('utf8');
+				var put_req = http.request(put_options, function(put_res) {
+					put_res.setEncoding('utf8');
 					var body = '';
-					post_res.on('data', function(chunk) {
+					
+					console.log('Entered put_req');	
+
+					put_res.on('data', function(chunk) {
 				  	body += chunk;
+						console.log('Recvieved part of body: ' + body);
+					});
+
+					put_res.on('end', function() {
+						console.log('Returns from put_req: ' + body);
 					});
 				});
-				
+
 				put_req.on('error', function(e) {
 					console.log(e.message);
 				});
-				
-				// TODO: This is not properly working with the PUT request
-				// DEBUG
-				console.log(goingStruct);
 
-				put_req.write(JSON.stringify(goingUsers));
+				put_req.write(JSON.stringify(goingStruct));
+				console.log(goingStruct);
+				put_req.end();
 			});
 		});
 	
@@ -284,5 +290,4 @@ exports.respondInvite = function(req, res) {
 	}
 
 
-	res.end();
 };
