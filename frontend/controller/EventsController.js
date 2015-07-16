@@ -137,7 +137,7 @@ exports.create = function(req, res) {
 							console.log(singleMember.id);
 							
 							var notification = {
-								message: "In einer deiner Gruppen wurde ein neues Event erstellt",
+								message: "In deiner Gruppe " + groupBody.name + "  wurde das Event " + returns.name + " erstellt",
 								type: "EVENTINVITE",
 								groupId: returns.groupid,
 								fromId: req.session.user.id,
