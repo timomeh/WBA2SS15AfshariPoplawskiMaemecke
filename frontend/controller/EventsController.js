@@ -2,7 +2,6 @@ var http = require('http');
 var notify = require('../NotificationHelper');
 var async = require('async');
 
-
 exports.showCreate = function(req, res) {
   http.get('http://localhost:8888/api/users/' + req.session.user.name, function(eventRes) {
 		//TODO: Fetch the chunks
@@ -82,8 +81,6 @@ exports.list = function(req, res) {
     console.log("Got error: " + e.message);
   });
 };
-
-
 
 exports.create = function(req, res) {
 	
@@ -216,6 +213,9 @@ exports.show = function(req, res) {
 exports.respondInvite = function(req, res) {
 	// Variables
 	var groupId = req.body.groupId;
+	var userId = req.session.user.id;
+	var userName = req.session.user.name;
+	var notifyId = req.body.notifyId;
 	//TODO: Handle the invite response
 	
 	// DEBUG
@@ -280,11 +280,22 @@ exports.respondInvite = function(req, res) {
 				put_req.write(JSON.stringify(goingStruct));
 				console.log(goingStruct);
 				put_req.end();
+				
+				// Delete notification and notify the creator of the event someone accepted an Invite
+				// TODO: Notify ALL user going to the event	
+				var notification = {
+					message: userName + ' hat einem Event zugesagt.'
+				};
+				notify.delete(userId, notifyId, function () {
+					notify.toUser(req, req.body.fromID, notification, function(err) {
+									console.log('Notification was fired');
+									if (err) return res.json({error: 'there was an error'});
+									res.redirect('/notifications');
+					});
+				});
 			});
 		});
-	
+
 		// TODO: Redirect User to Event?
-		// TODO: Delete the Notification from the system
-		// TODO: Notify other going users that another user is going
 	}
 };
