@@ -24,11 +24,13 @@
 									<input type="hidden" name="groupId" value="<%= notification.groupId %>">	
 									<input type="hidden" name="notifyId" value="<%= notification.id %>">
 									<input type="hidden" name="fromID" value="<%= notification.fromId  %>">
+									<input type="hidden" name="eventId" value="<%= notification.eventId %>">
 									<div class="btn-group">
 										<button name="type" value="going" class="js-delete-notification btn btn-success btn-sm">Zusagen</button>
 										<button name="type" value="notGoing" class="js-delete-notification btn btn-warning btn-sm">Absagen</button>
 									</div>
 								</form>
+								<a href="http://localhost:8000/events/<%= notification.eventId %>" class="btn btn-default btn-sm">Event ansehen</a>
 							<% } %>
               <div class="btn-group">
                 <form action="/notifications/delete" method="POST" style="display: inline">
