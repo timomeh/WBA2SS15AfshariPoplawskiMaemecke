@@ -70,6 +70,10 @@ router.get('/:id', function (req, res) {
 });
 
 router.put('/:id', function (req, res) {
+	
+	// DEBUG
+	console.log('PUT on server revieved: ' + req.params);	
+	
   var eventID = req.params.id;
   
 

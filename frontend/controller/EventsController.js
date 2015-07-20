@@ -3,11 +3,6 @@ var notify = require('../NotificationHelper');
 var async = require('async');
 
 exports.showCreate = function(req, res) {
-  http.get('http://localhost:8888/api/users/' + req.session.user.name, function(eventRes) {
-		//TODO: Fetch the chunks
-    //console.log(eventRes);
-  });
-
   var groupIDs = req.session.user.groups;
   var allGroups = [];
 	console.log(groupIDs);
