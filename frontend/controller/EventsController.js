@@ -64,6 +64,15 @@ exports.list = function(req, res) {
       if(Array.isArray(events)) {
         // Sort by nearest DateTime later
         // Need to wait until all Events in DB have a Date and Time field.
+				function compare(a,b) {
+					if (a.date < b.date)
+						return 1;
+		 			if (a.date > b.date)
+						return -1;
+		  		return 0;
+				}
+
+				events.sort(compare);
       } else {
         //Set array empty to prevent error from being rendered in Client
         events= [];
