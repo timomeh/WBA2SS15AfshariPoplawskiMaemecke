@@ -22,9 +22,8 @@
       <tr>
         <td><%= event.id %></td>
         <td><%= event.name %></td>
-        <!-- Implement those two later, when Event structure is unified -->
-        <td>Interwebs</td>
-        <td>01.01.1970</td>
+        <td><%= event.location %></td>
+        <td><%= event.date %>, <%= event.time %> Uhr</td>
         <td><button type="button" class="btn btn-danger">absagen</button></td>
       </tr>
     <% }); %>
