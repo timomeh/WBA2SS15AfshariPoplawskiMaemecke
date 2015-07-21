@@ -2,7 +2,12 @@
 
 <div class="container-fluid">
   <div class="row">
-      <div class="col-xs-12"><h2>Deine Events</h2></div>
+      <div class="col-xs-9"><h2>Deine Events</h2></div>
+			<div class="col-xs-3">
+      	<form action="/events/new">
+      	  <input type="submit" class="btn btn-primary pull-right" value="Event erstellen"></input>
+      	</form>
+			</div>
   </div>
   
   <table class="table table-striped">
@@ -25,15 +30,6 @@
     <% }); %>
     
   </table>
-
-  <div class="row">
-    <div class="col-xs-12"> <h3>Neues Event erstellen</h3></div>
-    <div class="col-xs-12"> 
-      <form action="/events/new">
-        <input type="submit" class="btn btn-primary" value="Event erstellen"></input>
-      </form>
-    </div>
-  </div>
 </div>
 
 <%- include('footer') %>
