@@ -2,6 +2,10 @@ var http = require('http');
 var notify = require('../NotificationHelper');
 var async = require('async');
 
+/*
+ *  This function renders event-new.ejs, allowing the User to
+ *  create a new Event.  
+ */
 exports.showCreate = function(req, res) {
   var groupIDs = req.session.user.groups;
   var allGroups = [];
