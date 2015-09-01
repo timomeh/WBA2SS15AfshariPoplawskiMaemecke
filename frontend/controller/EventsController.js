@@ -4,23 +4,32 @@ var async = require('async');
 
 /*
  *  This function renders event-new.ejs, allowing the User to
- *  create a new Event.  
+ *  create a new Event. 
+ *
+ *  If the user is not a member of any groups, the rendered view will
+ *  be a little different and the user will not be able to creat an event. 
  */
 exports.showCreate = function(req, res) {
   var groupIDs = req.session.user.groups;
   var allGroups = [];
-	console.log(groupIDs);
-	console.log(groupIDs[0]);
-	console.log(groupIDs.length);
+
+  // The rendered view is a little different if the user is not member
+  // of any groups
+  if(groupIDs.length < 1) {
+
+    // ATTENTION: If the user was a member of one or more groups before but
+    // left them, this will lead to an error due to the incomplete function
+    // for leavin groups.
+    // More info in Issue #12
+    res.render('event-new', {userGroups: false});
+  }
 
 	// Get all groups the given user is a member of
 	// This needs some GET request to the service and therefore
 	// uses async.lib
 	// The page is not rendered before all Groups are recieved.	
-	// TODO: Render a different view when the User is not member of any groups
 	async.each(groupIDs, function(singleID, callback) {
 		var groupBody = '';
-
 
 		// Get a single Group by its ID
 		http.get('http://localhost:8888/api/groups/' + singleID.id, function(groupRes) {
@@ -40,15 +49,9 @@ exports.showCreate = function(req, res) {
 			// TODO: Do something with this error
 			if(err) console.log('There was an error');
 
-			// Render event-new.ejs and send all Groups of the given user
-			res.render('event-new', {userGroups: allGroups});
+      // Render event-new.ejs and send all Groups of the given user
+      res.render('event-new', {userGroups: allGroups});			
 	});
-
-
-
-  // TODO: If the user is not a member of any Groups, let him creat a new one right away
-	
-
 };
 
 exports.list = function(req, res) {
