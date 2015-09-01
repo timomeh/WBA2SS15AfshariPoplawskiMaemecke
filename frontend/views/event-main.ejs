@@ -12,7 +12,6 @@
   
   <table class="table table-striped">
     <tr>
-      <th>ID</th>
       <th>Name</th>
       <th>Ort</th>
       <th>Zeit</th>
@@ -20,8 +19,7 @@
     </tr>
     <% events.forEach(function (event) { %>
       <tr>
-        <td><%= event.id %></td>
-        <td><%= event.name %></td>
+        <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
         <td><%= event.location %></td>
         <td><%= event.date %>, <%= event.time %> Uhr</td>
         <td><button type="button" class="btn btn-danger">absagen</button></td>
