@@ -17,7 +17,7 @@ describe('/api/users', function() {
         });
     });
 
-    it('should increment the id by +1', function(done) {
+    it('should create two users', function(done) {
       request(app)
         .post('/api/users/')
         .send(user2)
@@ -25,8 +25,22 @@ describe('/api/users', function() {
         .end(function(err, res) {
           res.body.vorname.should.eql(user2.vorname);
           res.body.nachname.should.eql(user2.nachname);
-          res.body.id.should.eql(user1.id+1);
-          user2.id = user1.id+1;
+          res.body.id.should.be.a.Number;
+          user2.id = res.body.id;
+          done(err);
+        })
+    })
+
+    it('should increment the id by +1', function(done) {
+      request(app)
+        .post('/api/users/')
+        .send(user3)
+        .expect(201)
+        .end(function(err, res) {
+          res.body.vorname.should.eql(user3.vorname);
+          res.body.nachname.should.eql(user3.nachname);
+          res.body.id.should.eql(user2.id+1);
+          user3.id = res.body.id;
           done(err);
         });
     });
@@ -36,7 +50,7 @@ describe('/api/users', function() {
   describe('GET /:id', function() {
     it('should return a created user', function(done) {
       request(app)
-        .get('/api/users/' + user1.id)
+        .get('/api/users/' + user1.name)
         .expect(200)
         .end(function(err, res) {
           res.body.vorname.should.eql(user1.vorname);
@@ -82,10 +96,10 @@ describe('/api/users', function() {
   });
 
   describe('DELETE /:id', function() {
-    var tmpid = user1.id;
+    var tmpid = user3.id;
     it('should delete a user with 204 NO CONTENT', function(done) {
       request(app)
-        .delete('/api/users/' + user1.id)
+        .delete('/api/users/' + user3.id)
         .expect(204)
         .end(function(err, res) {
           res.body.should.be.empty;

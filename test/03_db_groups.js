@@ -39,8 +39,6 @@ describe('/api/groups', function() {
         .expect(200)
         .end(function(err, res) {
           res.body.should.be.an.Array;
-          // TODO: In order to test the individual sent
-          // groups we have to connect to a test db
           done(err);
         });
     });
@@ -106,10 +104,22 @@ describe('/api/groups', function() {
         });
     });
 
-    it('should not add a nonexisting user to a group', function(done) {
+    it('should add another user to a group', function(done) {
       request(app)
         .post('/api/groups/' + group2.id + '/member')
         .send(user1)
+        .expect(200)
+        .end(function(err, res) {
+          var members = res.body.members;
+          members[members.length-1].id.should.eql(user1.id);
+          done(err);
+        });
+    });
+
+    it('should not add a nonexisting user to a group', function(done) {
+      request(app)
+        .post('/api/groups/' + group2.id + '/member')
+        .send(user3)
         .expect(404)
         .end(function(err, res) {
           done(err);
@@ -124,7 +134,7 @@ describe('/api/groups', function() {
         .expect(200)
         .end(function(err, res) {
           res.body.should.be.an.Array;
-          res.body.should.have.length(1);
+          res.body.should.have.length(2);
           done(err);
         });
     });
@@ -133,21 +143,10 @@ describe('/api/groups', function() {
   describe('DELETE /:id/member/:memberid', function() {
     it('should delete a member from a group', function(done) {
       request(app)
-        .delete('/api/groups/' + group2.id + '/member/' + user2.id)
+        .delete('/api/groups/' + group2.id + '/member/' + user1.id)
         .expect(200)
         .end(function(err, res) {
-          res.body.should.not.have.keys('member');
-          done(err);
-        });
-    });
-  });
-
-  describe('GET /:id/member/', function() {
-    it('should return a 404 if no members exist', function(done) {
-      request(app)
-        .get('/api/groups/' + group2.id + '/member')
-        .expect(404)
-        .end(function(err, res) {
+          res.body.members.should.have.length(1);
           done(err);
         });
     });

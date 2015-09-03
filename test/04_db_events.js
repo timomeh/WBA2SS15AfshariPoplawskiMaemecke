@@ -11,8 +11,6 @@ describe('/api/events', function() {
         .send(event1)
         .expect(201)
         .end(function(err, res) {
-          console.log(res.body);
-          console.log(err);
           res.body.name.should.eql(event1.name);
           res.body.id.should.be.a.Number;
           event1.id = res.body.id;
@@ -121,7 +119,7 @@ describe('/api/events', function() {
     it('should not add a nonexisting user to an event', function(done) {
       request(app)
         .post('/api/events/' + event2.id + '/member')
-        .send(user1)
+        .send(user3)
         .expect(404)
         .end(function(err, res) {
           done(err);

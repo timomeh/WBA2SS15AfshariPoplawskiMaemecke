@@ -1,7 +1,8 @@
 app = require('../service').express;
 
-user1 = { vorname: "Brian", nachname: "Cohan" };
-user2 = { vorname: "Bigus", nachname: "Dickus" };
+user1 = { vorname: "Brian", nachname: "Cohan", name: "bc" };
+user2 = { vorname: "Bigus", nachname: "Dickus", name: "bd" };
+user3 = { vorname: "Axel", nachname: "Schweiss", name: "as" };
 
 event1 = { name: "Tolle Sause"};
 event2 = { name: "Nicht so tolle Sause"};
