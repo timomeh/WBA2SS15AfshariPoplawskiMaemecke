@@ -26,6 +26,11 @@ $(function() {
       req.contentType = "application/json";
     }
 
+    if (method === 'PUT') {
+      req.data = data;
+      req.contentType = "application/json";
+    }
+
     $.ajax(req)
       .done(function(retData) {
         return cb(null, retData);
