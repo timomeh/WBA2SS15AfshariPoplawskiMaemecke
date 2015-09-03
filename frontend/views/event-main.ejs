@@ -10,26 +10,76 @@
 			</div>
   </div>
 
-  
-  <table class="table table-striped">
-    <tr>
-      <th>Name</th>
-      <th>Ort</th>
-      <th>Zeit</th>
-      <th>Teilnahme ändern</th>
-      <th>Zugesagt</th>
-    </tr>
-    <% events.forEach(function (event) { %>
-      <tr>
-          <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
-          <td><%= event.location %></td>
-          <td><%= event.date %>, <%= event.time %> Uhr</td>
-          <td><button type="button" class="btn btn-danger" onclick="exitEvent(<%= event.id %>, <%= JSON.stringify(event.going) %>, <%= user.id %>)">absagen</button></td>
-          <td><%=1 %></td>
-      </tr>
-    <% }); %>
-    
-  </table>
+  <div class="row">
+		<div class="col-xs-12">
+			<h3>Anstehende Events</h3>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<% if (upcomingEvents.length > 0) { %>
+				
+				<table class="table table-striped">
+  			  <tr>
+  			    <th>Name</th>
+  			    <th>Ort</th>
+  			    <th>Zeit</th>
+  			    <th>Teilnahme ändern</th>
+  			    <th>Zugesagt</th>
+  			  </tr>
+  			  <% events.forEach(function (event) { %>
+  			    <tr>
+  			        <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+  			        <td><%= event.location %></td>
+  			        <td><%= event.date %>, <%= event.time %> Uhr</td>
+  			        <td><button type="button" class="btn btn-danger" onclick="exitEvent(<%= event.id %>, <%= JSON.stringify(event.going) %>, <%= user.id %>)">absagen</button></td>
+  			        <td><%=1 %></td>
+  			    </tr>
+  			  <% }); %>
+  			  
+  			</table>
+			<% } else { %>
+				<p>Du hast keine anstehenden Events.</p>
+			<% } %>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Vergangene Events</h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<% if (pastEvents > 0) { %>
+			
+				<table class="table table-striped">
+  			  <tr>
+  			    <th>Name</th>
+  			    <th>Ort</th>
+  			    <th>Zeit</th>
+  			    <th>Teilnahme ändern</th>
+  			    <th>Zugesagt</th>
+  			  </tr>
+  			  <% events.forEach(function (event) { %>
+  			    <tr>
+  			        <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+  			        <td><%= event.location %></td>
+  			        <td><%= event.date %>, <%= event.time %> Uhr</td>
+  			        <td><button type="button" class="btn btn-danger" onclick="exitEvent(<%= event.id %>, <%= JSON.stringify(event.going) %>, <%= user.id %>)">absagen</button></td>
+  			        <td><%=1 %></td>
+  			    </tr>
+  			  <% }); %>
+  			  
+  			</table>
+			<% } else { %>
+				<p> Du hast bisher an keinen Events teilgenommen, sei nicht schüchtern <p>
+			<% } %>
+		</div>
+	</div>
+	
 </div>
 
 <script type="text/javascript">

@@ -73,15 +73,44 @@ exports.list = function(req, res) {
       var allEvents = JSON.parse(body);
 			
 			if(Array.isArray(allEvents)) {
-				var events = [];
+			
+				// Set up arrays
+				var upcomingEvents = [];
+				var pastEvents = [];
+				var events = []; //can be deleted after switching to upcoming and past arrays
+				var currentDate = new Date();
+
+				// We need to check every single Event
+				// This works for now, but will take forever if we had 100000 Events in our Database
+				// Should be checking for all groups of a User and the events in these groups
 				for(var e in allEvents) {
 					for(var g in allEvents[e].going) {
+
+						// If the user is in the going Array, we want to display the Event to him
 						if (allEvents[e].going[g].id == req.session.user.id) {
 							events.push(allEvents[e]);
+							
+							var eventDate = new Date(allEvents[e].date);
+
+							// Get current time
+							console.log(typeof eventDate);
+							console.log(eventDate);
+
+							// Define if the event is upcoming or in the past
+							if (eventDate < currentDate) {
+								upcomingEvents.push(allEvents[e]);
+							} else {
+								pastEvents.push(allEvents[e]);
+							}
 						}
 					}
 				}
-				console.log(events);	
+				
+				//DEBUG
+				console.log('===UPCOMING===');
+				console.log(upcomingEvents);	
+				console.log('===PAST===');
+				console.log(pastEvents);	
 
 				function compare(a,b) {
 					if (a.date < b.date)
@@ -97,26 +126,8 @@ exports.list = function(req, res) {
        	 var events= [];
 			}
 
-			/*
-       if(Array.isArray(allEvents)) {
-        // Sort by nearest DateTime later
-        // Need to wait until all Events in DB have a Date and Time field.
-				function compare(a,b) {
-					if (a.date < b.date)
-						return 1;
-		 			if (a.date > b.date)
-						return -1;
-		  		return 0;
-				}
-
-				allEvents.sort(compare);
-      } else {
-        //Set array empty to prevent error from being rendered in Client
-        allEvents= [];
-      } */
-
       // Render frontend with the recieved events
-      res.render('event-main', { events: events });
+      res.render('event-main', { events: events, upcomingEvents: upcomingEvents, pastEvents: pastEvents });
     });
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
