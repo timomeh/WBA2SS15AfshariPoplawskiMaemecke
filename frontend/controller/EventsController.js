@@ -70,9 +70,35 @@ exports.list = function(req, res) {
 
     // Data transfer has ended, do something with the data
     eventRes.on('end', function() {
-      var events = JSON.parse(body);
+      var allEvents = JSON.parse(body);
+			
+			if(Array.isArray(allEvents)) {
+				var events = [];
+				for(var e in allEvents) {
+					for(var g in allEvents[e].going) {
+						if (allEvents[e].going[g].id == req.session.user.id) {
+							events.push(allEvents[e]);
+						}
+					}
+				}
+				console.log(events);	
 
-      if(Array.isArray(events)) {
+				function compare(a,b) {
+					if (a.date < b.date)
+						return 1;
+		 			if (a.date > b.date)
+						return -1;
+		  		return 0;
+				}
+
+				allEvents.sort(compare);
+			} else {
+				 //Set array empty to prevent error from being rendered in Client
+       	 var events= [];
+			}
+
+			/*
+       if(Array.isArray(allEvents)) {
         // Sort by nearest DateTime later
         // Need to wait until all Events in DB have a Date and Time field.
 				function compare(a,b) {
@@ -83,11 +109,11 @@ exports.list = function(req, res) {
 		  		return 0;
 				}
 
-				events.sort(compare);
+				allEvents.sort(compare);
       } else {
         //Set array empty to prevent error from being rendered in Client
-        events= [];
-      }
+        allEvents= [];
+      } */
 
       // Render frontend with the recieved events
       res.render('event-main', { events: events });
