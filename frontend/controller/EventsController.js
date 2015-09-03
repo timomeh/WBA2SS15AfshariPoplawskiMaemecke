@@ -124,6 +124,8 @@ exports.list = function(req, res) {
 			} else {
 				 //Set array empty to prevent error from being rendered in Client
        	 var events= [];
+				 var upcomingEvents = [];
+				 var pastEvents = [];
 			}
 
       // Render frontend with the recieved events
