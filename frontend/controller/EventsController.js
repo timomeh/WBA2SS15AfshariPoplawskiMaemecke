@@ -55,6 +55,10 @@ exports.showCreate = function(req, res) {
 };
 
 exports.list = function(req, res) {
+
+	// Make user object available in template
+	res.locals.user = req.session.user;
+
   // GET request for all events
   http.get("http://localhost:8888/api/events", function(eventRes) {
     var body = '';
