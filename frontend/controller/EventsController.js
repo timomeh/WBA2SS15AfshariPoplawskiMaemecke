@@ -137,7 +137,7 @@ exports.list = function(req, res) {
 exports.create = function(req, res) {
 	
 	// Set the creating user as first going user
-	var going = [{id: req.session.user.id}];
+	var going = [{id: req.session.user.id, name: req.session.user.name}];
 	req.body.going = going;
   
   // Set options for request
@@ -293,7 +293,7 @@ exports.respondInvite = function(req, res) {
 
 				// Append the current user to the going users
 				var goingUsers = groupBody.going.slice();
-				var currUser = {id: req.session.user.id};
+				var currUser = {id: req.session.user.id, name: req.session.user.name};
 				goingUsers.push(currUser);
 				var goingStruct = {'going': goingUsers}; // Way too tired, no idea what im doing 
 
