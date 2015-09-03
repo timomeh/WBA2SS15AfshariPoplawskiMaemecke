@@ -9,6 +9,7 @@
       	</form>
 			</div>
   </div>
+
   
   <table class="table table-striped">
     <tr>
@@ -16,17 +17,63 @@
       <th>Ort</th>
       <th>Zeit</th>
       <th>Teilnahme ändern</th>
+      <th>Zugesagt</th>
     </tr>
     <% events.forEach(function (event) { %>
       <tr>
-        <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
-        <td><%= event.location %></td>
-        <td><%= event.date %>, <%= event.time %> Uhr</td>
-        <td><button type="button" class="btn btn-danger">absagen</button></td>
+          <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+          <td><%= event.location %></td>
+          <td><%= event.date %>, <%= event.time %> Uhr</td>
+          <td><button type="button" class="btn btn-danger" onclick="exitEvent(<%= event.id %>, <%= JSON.stringify(event.going) %>, <%= user.id %>)">absagen</button></td>
+          <td><%=1 %></td>
       </tr>
     <% }); %>
     
   </table>
 </div>
+
+<script type="text/javascript">
+	
+	/*
+	 *  This function is called everytime the 'absagen'-button receives an onclick
+	 *  event. It sends a PUT request with the updated going-array (meaning without the current user)
+	 *  to the Server.
+	 */
+  function exitEvent(eventID, goingUsers, userID) {
+
+		// Deletes the entry of the logged in user from the going array
+    function updateUsers() {
+      var index = findIndex(function(i) {
+        goingUsers.splice(i,1);
+      });
+      return JSON.stringify({"going": goingUsers});
+    }
+
+		// Finds the index of the logged in user in the going array
+    function findIndex(_callback) {
+      for (var i = 0; i < goingUsers.length; i++) {
+        if (goingUsers[i].id == userID) {
+          index = i;
+          _callback(index);
+          break;
+        }
+      } 
+    }
+    
+    var updatedUsers = updateUsers();
+   
+		// The actual request 
+    ajaxReq('PUT', 'http://localhost:8888/api/events/' + eventID, updatedUsers, function(err, data) {
+      console.log(updatedUsers);
+      if (err) {
+        // Error Behandlung
+      }
+      // Weitermachen
+			// TODO: Do something useful
+      console.log('Updated the event');
+      console.log(data);
+    });
+  } 
+</script>
 
 <%- include('footer') %>
