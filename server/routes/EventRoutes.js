@@ -9,8 +9,10 @@ var db = redis.createClient();
 
 router.post('/', function (req, res) {
 
-//DEBUG 
-console.log("Entered POST on Server, recieved " + JSON.stringify(req.body));
+  // TODO: Only set specific variables
+
+  //DEBUG 
+  console.log("Entered POST on Server, recieved " + JSON.stringify(req.body));
 
   db.incr('eventIDs', function (err, id) {
     if(err) return res.status(500).send('Error while incrementing ID in Database');
@@ -165,9 +167,11 @@ router.get('/:id/member', function (req, res) {
     if(event === null) return res.status(404).send('No event with the id ' +eventID +' was found in the database.');
 
     event = JSON.parse(event);
+    console.log(event);
+    console.log(event.member);
 
-    if('members' in event) {
-      res.json(event.members);
+    if('member' in event) {
+      res.json(event.member);
     } else {
       return res.status(404).send('This event has no members yet.');
     }
@@ -187,16 +191,16 @@ router.delete('/:id/member/:user', function(req, res) {
     event = JSON.parse(event);
 
     // Check if Event has members
-    if('members' in event) {
-      for(var key in event.members) {
+    if('member' in event) {
+      for(var key in event.member) {
 
         // If the user is found in the event's members, delete him
-        if(event.members[key].id == userID) {
-          event.members.splice(key, 1);
+        if(event.member[key].id == userID) {
+          event.member.splice(key, 1);
 
           // Remove whole members-array if this was the last member
-          if(!(event.members.length > 0)) {
-            delete event.members;
+          if(!(event.member.length > 0)) {
+            delete event.member;
           }
 
           // Update event
