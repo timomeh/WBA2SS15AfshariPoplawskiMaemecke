@@ -84,10 +84,10 @@ exports.list = function(req, res) {
 				// This works for now, but will take forever if we had 100000 Events in our Database
 				// Should be checking for all groups of a User and the events in these groups
 				for(var e in allEvents) {
-					for(var g in allEvents[e].going) {
+					for(var g in allEvents[e].member) {
 
 						// If the user is in the going Array, we want to display the Event to him
-						if (allEvents[e].going[g].id == req.session.user.id) {
+						if (allEvents[e].member[g].id == req.session.user.id) {
 							events.push(allEvents[e]);
 							
 							var eventDate = new Date(allEvents[e].date);
@@ -97,7 +97,7 @@ exports.list = function(req, res) {
 							console.log(eventDate);
 
 							// Define if the event is upcoming or in the past
-							if (eventDate < currentDate) {
+							if (eventDate > currentDate) {
 								upcomingEvents.push(allEvents[e]);
 							} else {
 								pastEvents.push(allEvents[e]);
@@ -114,13 +114,14 @@ exports.list = function(req, res) {
 
 				function compare(a,b) {
 					if (a.date < b.date)
-						return 1;
-		 			if (a.date > b.date)
 						return -1;
+		 			if (a.date > b.date)
+						return 1;
 		  		return 0;
 				}
 
-				allEvents.sort(compare);
+				upcomingEvents.sort(compare);
+        pastEvents.sort(compare).reverse();
 			} else {
 				 //Set array empty to prevent error from being rendered in Client
        	 var events= [];
@@ -139,8 +140,8 @@ exports.list = function(req, res) {
 exports.create = function(req, res) {
 	
 	// Set the creating user as first going user
-	var going = [{id: req.session.user.id, name: req.session.user.name}];
-	req.body.going = going;
+	var member = [{id: req.session.user.id, name: req.session.user.name}];
+	req.body.member = member;
   
   // Set options for request
   var post_options = {
@@ -186,7 +187,7 @@ exports.create = function(req, res) {
 					
 						groupBody = JSON.parse(groupBody);	
 
-						async.each(groupBody.members, function(singleMember, callback) {
+						async.each(groupBody.member, function(singleMember, callback) {
 							// Debug
 							console.log(singleMember.id);
 							
@@ -235,6 +236,11 @@ exports.create = function(req, res) {
 };
 
 exports.show = function(req, res) {
+
+  // Make user object available in template
+  res.locals.user = req.session.user;
+
+
   // GET request for all events
   http.get("http://localhost:8888/api/events/" + req.params.id, function(eventRes) {
     var body = '';
