@@ -110,7 +110,7 @@ describe('/api/events', function() {
         .send(user2)
         .expect(200)
         .end(function(err, res) {
-          var members = res.body.members;
+          var members = res.body.member;
           members[members.length-1].id.should.eql(user2.id);
           done(err);
         });
