@@ -15,7 +15,7 @@
     <dd><%= event.date %></dd>
     <dt>Uhrzeit</dt>
     <dd><%= event.time %> Uhr</dd>
-    <button type="button" class="btn btn-danger">absagen</button>
+    <button type="button" class="js-leave-event btn btn-danger" data-eid="<%= event.id %>" data-uid="<%= user.id %>">absagen</button>
   </dl>
 </div>
 
